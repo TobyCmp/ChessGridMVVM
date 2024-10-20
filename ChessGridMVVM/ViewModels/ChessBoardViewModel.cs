@@ -48,13 +48,13 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     {
         Board = new ObservableCollection<ObservableCollection<Square>>();
 
-        for (int j = 0; j < Size; j++)
+        for (int j = 7; j >= 0; j--)
         {
             var row = new ObservableCollection<Square>();
 
             for (int i = 0; i < Size; i++)
             {
-                var color = (i + j) % 2 == 0 ? "White" : "Black";
+                var color = (i + j) % 2 == 1 ? "White" : "Black";
                 row.Add(new Square(color, j, i));
             }
             Board.Add(row);
@@ -67,7 +67,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         {
             for(int i = 0; i < Size; i++)
             {
-                if(j == 1)
+                if(j == 0)
                 {
                     Board[j][i].Piece = new Pawn("White");
                 }
