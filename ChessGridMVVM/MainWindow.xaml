@@ -6,7 +6,6 @@
         Title="Chess Grid" Height="400" Width="400">
     <Window.Resources>
         <converters:InverseColorConverter x:Key="InverseColorConverter"/>
-        <converters:ReverseCollectionConverter x:Key="ReverseCollectionConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
