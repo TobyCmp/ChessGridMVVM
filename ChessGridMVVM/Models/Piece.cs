@@ -25,6 +25,9 @@ namespace ChessGridMVVM.Models
             get;
         }
 
+        public abstract bool isValidMove(Square startingSquare, Square endSquare);
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
