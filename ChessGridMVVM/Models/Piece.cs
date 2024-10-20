@@ -11,6 +11,7 @@ namespace ChessGridMVVM.Models
 {
     public abstract class Piece : INotifyPropertyChanged
     {
+        protected int _value; 
         protected string _pieceSymbol;
         public string _pieceColor { get; set; }
 
@@ -25,7 +26,14 @@ namespace ChessGridMVVM.Models
             get;
         }
 
+        public abstract int Value
+        {
+            get;
+        }
         public abstract bool isValidMove(Square startingSquare, Square endSquare);
+
+
+
 
 
         public event PropertyChangedEventHandler PropertyChanged;
