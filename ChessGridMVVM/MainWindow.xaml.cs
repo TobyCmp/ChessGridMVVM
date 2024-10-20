@@ -19,10 +19,10 @@ namespace ChessGridMVVM
         {
             var border = sender as FrameworkElement;
             var dataContext = border.DataContext as Square;
-            //if (dataContext != null)
-            //{
-            //    ViewModel.SelectSquare(dataContext.Row, dataContext.Column);
-            //}
+            if (dataContext != null)
+            {
+                ViewModel.SelectSquare(dataContext.Row, dataContext.Column);
+            }
         }
 
         private void NextTurn_Click(object sender, RoutedEventArgs e)
