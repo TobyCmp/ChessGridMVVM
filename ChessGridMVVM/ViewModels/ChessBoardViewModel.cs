@@ -24,6 +24,25 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
+    public Square SelectedSquare
+    {
+        get => _selectedSquare;
+        set
+        {
+            if(_selectedSquare != null)
+            {
+                _selectedSquare.RevertColor();
+
+            }
+            if(value != null)
+            {
+                _selectedSquare = value;
+                _selectedSquare.SetColour("Red");
+            }
+            _selectedSquare = value;
+            OnPropertyChanged();
+        }
+    }
     //public string CurrentPlayer
     //{
     //    get => _currentPlayer;
@@ -67,84 +86,45 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         {
             for(int i = 0; i < Size; i++)
             {
-                if(j == 0)
+                if(j == 1)
                 {
-                    Board[j][i].Piece = new Pawn("White");
+                    Board[7-j][i].Piece = new Pawn("White");
                 }
 
                 if (j == 6)
                 {
-                    Board[j][i].Piece = new Pawn("Black");
+                    Board[7-j][i].Piece = new Pawn("Black");
                 }
             }
         }
+        Board[0][0].Piece = new Rook("Black");
+        Board[0][7].Piece = new Rook("Black");
+        Board[7][0].Piece = new Rook("White");
+        Board[7][7].Piece = new Rook("White");
+
     }
-    //private void InitializeBoard()
-    //{
-    //    Board = new ObservableCollection<ObservableCollection<Square>>();
-
-    //    var whitePawnSymbol = "\u2659";  // Unicode for white pawn
-    //    var blackPawnSymbol = "\u265F";  // Unicode for black pawn
-
-    //    for (int i = 0; i < Size; i++)
-    //    {
-    //        var row = new ObservableCollection<Square>();
-
-    //        for (int j = 0; j < Size; j++)
-    //        {
-    //            var color = (i + j) % 2 == 0 ? "White" : "Black";
-    //            string pieceSymbol = null;
-
-    //            if (i == 1)
-    //            {
-    //                pieceSymbol = whitePawnSymbol;
-    //            }
-    //            else if (i == 6)
-    //            {
-    //                pieceSymbol = blackPawnSymbol;
-    //            }
-
-    //            row.Add(new Square(color, pieceSymbol, i, j));
-    //        }
-
-    //        Board.Add(row);
-    //    }
-    //}
 
 
-    //public void SelectSquare(int row, int col)
-    //{
-    //    if (row >= 0 && row < Size && col >= 0 && col < Size)
-    //    {
-    //        var selectedSquare = Board[row][col];
-
-    //        if (_selectedSquare != null)
-    //        {
-    //            var currentRow = _selectedSquare.Row;
-    //            var currentCol = _selectedSquare.Column;
-
-    //            if (IsValidMove(currentRow, currentCol, row, col) &&
-    //                (selectedSquare.PieceSymbol == null || selectedSquare.PieceSymbol != GetCurrentPlayerPawnSymbol()))
-    //            {
-    //                MovePawn(currentRow, currentCol, row, col);
-    //                _selectedSquare = null;
-    //                ToggleTurn(); // Switch turns after a valid move
-    //            }
-    //            else
-    //            {
-    //                _selectedSquare = Board[row][col];
-    //            }
-    //        }
-    //        else
-    //        {
-    //            // Select square only if it contains a piece belonging to the current player
-    //            if (selectedSquare.PieceSymbol != null && selectedSquare.PieceSymbol == GetCurrentPlayerPawnSymbol())
-    //            {
-    //                _selectedSquare = selectedSquare;
-    //            }
-    //        }
-    //    }
-    //}
+    public void SelectSquare(int row, int col)
+    {
+        if (row >= 0 && row < Size && col >= 0 && col < Size)
+        {
+            if(SelectedSquare == null && Board[7-row][col].Piece != null) // Select first piece
+            {
+                SelectedSquare = Board[7 - row][col];
+            }
+            else if(SelectedSquare != null && Board[7 - row][col].Piece != null && Board[7 - row][col].Piece._pieceColor == SelectedSquare.Piece._pieceColor) // If second selected piece is one of own, update selected piece
+            {
+                SelectedSquare.RevertColor();
+                SelectedSquare = Board[7 - row][col];
+            }
+            else if(SelectedSquare != null && SelectedSquare.Piece != null && SelectedSquare.Piece.isValidMove(SelectedSquare, Board[7 - row][col]) == true)
+            {
+                Move(SelectedSquare.Row, SelectedSquare.Column, row, col);
+                SelectedSquare = null;
+            }
+        }
+    }
 
 
     //private string GetCurrentPlayerPawnSymbol()
@@ -153,61 +133,41 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     //}
 
 
-    //private bool IsValidMove(int startRow, int startCol, int endRow, int endCol)
-    //{
-    //    var startPieceSymbol = Board[startRow][startCol].PieceSymbol;
-    //    var endPieceSymbol = Board[endRow][endCol].PieceSymbol;
+    private void Move(int startRow, int startCol, int endRow, int endCol)
+    {
+        var startSquare = Board[7- startRow][startCol];
+        var endSquare = Board[7- endRow][endCol];
+        
+        if(endSquare.Piece != null)
+        {
+            Capture(endSquare.Piece);
+        }
 
-    //    if (endRow < 0 || endRow >= Size || endCol < 0 || endCol >= Size)
-    //        return false;
+        endSquare.Piece = startSquare.Piece;
+        startSquare.Piece = null;
 
-    //    // White pawn movement
-    //    if (startPieceSymbol == "\u2659")
-    //    {
-    //        if (endRow == startRow + 1 && startCol == endCol && endPieceSymbol == null)
-    //        {
-    //            return true;
-    //        }
-    //        else if (endRow == startRow + 1 && (endCol == startCol + 1 || endCol == startCol - 1) && endPieceSymbol != null)
-    //        {
-    //            return true;
-    //        }
-    //    }
-    //    // Black pawn movement
-    //    else if (startPieceSymbol == "\u265F")
-    //    {
-    //        if (endRow == startRow - 1 && startCol == endCol && endPieceSymbol == null)
-    //        {
-    //            return true;
-    //        }
-    //        else if (endRow == startRow - 1 && (endCol == startCol + 1 || endCol == startCol - 1) && endPieceSymbol != null)
-    //        {
-    //            return true;
-    //        }
-    //    }
+        startSquare.RevertColor();
 
-    //    return false;
-    //}
 
-    //private void MovePawn(int startRow, int startCol, int endRow, int endCol)
-    //{
-    //    var startSquare = Board[startRow][startCol];
-    //    var endSquare = Board[endRow][endCol];
+        //if (endSquare == null || (endSquare.PieceSymbol != null && endSquare.PieceSymbol != startSquare.PieceSymbol))
+        //{
+        //    endSquare.PieceSymbol = startSquare.PieceSymbol;
+        //    startSquare.PieceSymbol = null;
 
-    //    if (endSquare.PieceSymbol == null || (endSquare.PieceSymbol != null && endSquare.PieceSymbol != startSquare.PieceSymbol))
-    //    {
-    //        endSquare.PieceSymbol = startSquare.PieceSymbol;
-    //        startSquare.PieceSymbol = null;
+        //    if (_lastMovedSquare != null)
+        //    {
+        //        _lastMovedSquare.RevertColor();
+        //    }
 
-    //        if (_lastMovedSquare != null)
-    //        {
-    //            _lastMovedSquare.RevertColor();
-    //        }
+        //    endSquare.SetColour("green");
+        //    _lastMovedSquare = endSquare;
+        //}
+    }
 
-    //        endSquare.SetColour("green");
-    //        _lastMovedSquare = endSquare;
-    //    }
-    //}
+    private void Capture(Piece captured)
+    {
+        
+    }
 
     //public void NextTurn()
     //{
