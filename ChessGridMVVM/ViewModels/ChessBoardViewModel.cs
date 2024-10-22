@@ -17,19 +17,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private string _secondaryColor = "#eeeed2";
     private string _highlightColor = "Red";
     private string _posssiblemoveColor = "Cyan";
-    private List<Square> _possibleMoves;
-
-
-    public List<Square> PossibleMoves
-    {
-        get => _possibleMoves;
-
-        set
-        {
-            _possibleMoves = value;
-        }
-
-    }
 
     public Game Game
     {
@@ -62,13 +49,13 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         {
             if(_selectedSquare != null)
             {
-                removeValidMoves();
+                removeValidMoves(_selectedSquare);
 
             }
             if(value != null)
             {
                 _selectedSquare = value;
-                DrawValidMoves(_selectedSquare);
+                drawValidMoves(_selectedSquare);
             }
             _selectedSquare = value;
             OnPropertyChanged();
@@ -101,6 +88,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     private void IntializePieces()
     {
+        
         for(int j = 0; j <= Size; j++)
         {
             for(int i = 0; i < Size; i++)
@@ -108,11 +96,13 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 if(j == 1)
                 {
                     Board[7-j][i].Piece = new Pawn("White");
+                    Game.WhitePlayer.Pieces.Add(Board[7 - j][i]);
                 }
 
                 if (j == 6)
                 {
                     Board[7-j][i].Piece = new Pawn("Black");
+                    Game.BlackPlayer.Pieces.Add(Board[7 - j][i]);
                 }
             }
         }
@@ -122,6 +112,9 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         Board[7][7].Piece = new Rook("White");
         Board[7][2].Piece = new Bishop("White");
         Board[7][3].Piece = new Queen("White");
+        Board[5][4].Piece = new King("White");
+        Game.WhitePlayer.Pieces.Add(Board[5][4]);
+
 
     }
 
@@ -133,11 +126,14 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             if(SelectedSquare == null && Board[7-row][col].Piece != null && Game.CurrentPlayer.Color == Board[7 - row][col].Piece.PieceColor) // Select first piece
             {
                 SelectedSquare = Board[7 - row][col];
+                SelectedSquare.SetColour(_highlightColor);
             }
             else if(SelectedSquare != null && Board[7 - row][col].Piece != null && Board[7 - row][col].Piece.PieceColor == SelectedSquare.Piece.PieceColor) // If second selected piece is one of own, update selected piece
             {
                 SelectedSquare.RevertColor();
                 SelectedSquare = Board[7 - row][col];
+                SelectedSquare.SetColour(_highlightColor);
+
             }
             else if(SelectedSquare != null && SelectedSquare.Piece != null && isValidMove(SelectedSquare, Board[7 - row][col]) == true) // 
             {
@@ -152,16 +148,25 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     {
         int dx = end.Column - start.Column;
         int dy = end.Row - start.Row;
+        int yStep = dy == 0 ? 0 : dy / Math.Abs(dy);
+        int xStep = dx == 0 ? 0 : dx / Math.Abs(dx);
+        int currentRow = start.Row + yStep;
+        int currentColumn = start.Column + xStep;
 
+        if(start.Piece.Name == "King")
+        {
+            List<Square> list = returnThreats(end);
+            if(list.Count == 0)
+            {
+                return start.Piece.isValidMove(start, end);
+            }
+            return false;
+        }
         if (Math.Abs(dx) != Math.Abs(dy) && dx != 0 && dy != 0) // Check that move is either straight or diagonal 
         {
             return false;
         }
 
-        int yStep = dy == 0 ? 0 : dy / Math.Abs(dy);
-        int xStep = dx == 0 ? 0 : dx / Math.Abs(dx);
-        int currentRow = start.Row + yStep;
-        int currentColumn = start.Column + xStep;
 
         while (currentRow != end.Row || currentColumn != end.Column) // Check if there exists a piece in any square between start and end 
         {
@@ -177,29 +182,38 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     }
 
     // Highlight selected cell and highlight all valid moves from that cell
-    public void DrawValidMoves(Square selectedSquare) 
+    public List<Square> getValidMoves(Square selectedSquare) 
     {
-        PossibleMoves = new List<Square>();
-        selectedSquare.SetColour(_highlightColor);
+        List<Square> possMoves = new List<Square>();
         for(int col = 0; col < Size; col++) // For each xy coordinate, check if the piece has a valid move
         {
             for(int row = 0; row< Size; row++)
             {
                 if(isValidMove(selectedSquare, Board[7- row][col]) == true)
                 {
-                    Board[7 - row][col].SetColour(_posssiblemoveColor);
-                    PossibleMoves.Add(Board[7 - row][col]);
+                    possMoves.Add(Board[7 - row][col]);
                 }
             }
+        }
+        return possMoves;
+    }
+
+    public void drawValidMoves(Square s)
+    {
+        List<Square> l = getValidMoves(s);
+        foreach (Square square in l)
+        {
+            square.SetColour(_posssiblemoveColor);
         }
     }
 
     // Remove the highlighting of possible move cells
-    public void removeValidMoves()
+    public void removeValidMoves(Square s)
     {
-        foreach(Square s in PossibleMoves)
+        List<Square> l = getValidMoves(s);
+        foreach (Square square in l)
         {
-            s.RevertColor();
+            square.RevertColor();
         }
     }
 
@@ -220,7 +234,101 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         startSquare.RevertColor();
         Game.nextTurn();
     }
+    private List<Square> returnThreats(Square originalSquare)
+    {
+        List<Square> threats = new List<Square>();
 
+        // Check the color of the original square's piece
+        if (originalSquare.Piece.PieceColor == "White")
+        {
+            // Loop through each black piece on the board
+            foreach (Square square in Game.BlackPlayer.Pieces)
+            {
+                // Get all valid moves for the current black piece
+                List<Square> validMoves = getValidMoves(square);
+
+                // Check if any of the valid moves threaten the original square
+                foreach (Square moveSquare in validMoves)
+                {
+                    if (moveSquare == originalSquare)
+                    {
+                        threats.Add(square); // Add the threatening piece's square
+                    }
+                }
+            }
+        }
+        else if (originalSquare.Piece.PieceColor == "Black")
+        {
+            // Loop through each white piece on the board
+            foreach (Square square in Game.WhitePlayer.Pieces)
+            {
+                // Get all valid moves for the current white piece
+                List<Square> validMoves = getValidMoves(square);
+
+                // Check if any of the valid moves threaten the original square
+                foreach (Square moveSquare in validMoves)
+                {
+                    if (moveSquare == originalSquare)
+                    {
+                        threats.Add(square); // Add the threatening piece's square
+                    }
+                }
+            }
+        }
+
+        return threats;
+    }
+
+    //private List<Square> returnThreats(Square originalSquare)
+    //{
+    //    List<Square> allMoves = new List<Square>();
+    //    List<Square> threats = new List<Square>();
+
+    //    if (originalSquare.Piece.PieceColor == "White")
+    //    {
+    //        foreach(Square square in Game.BlackPlayer.Pieces)
+    //        {
+    //            getValidMoves(square);
+    //            foreach(Square moveSquare in PossibleMoves)
+    //            {
+    //                if(moveSquare == originalSquare)
+    //                {
+    //                    threats.Add(square);
+    //                }
+    //            }
+    //        }
+
+    //    }
+
+    //    if (originalSquare.Piece.PieceColor == "Black")
+    //    {
+    //        foreach (Square square in Game.WhitePlayer.Pieces)
+    //        {
+    //            getValidMoves(square);
+    //            foreach (Square moveSquare in PossibleMoves)
+    //            {
+    //                if (moveSquare == originalSquare)
+    //                {
+    //                    threats.Add(square);
+    //                }
+    //            }
+    //        }
+
+    //    }
+        
+    //    return threats;
+    //}
+
+    public bool isThreatened(Square originalSquare)
+    {
+        if(returnThreats(originalSquare).Count > 0 ) return true;
+
+        return false;
+    }
+    private void Capture(Piece p)
+    {
+
+    }
     public event PropertyChangedEventHandler PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

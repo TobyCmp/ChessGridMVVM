@@ -8,11 +8,11 @@ namespace ChessGridMVVM.Models
 {
     public class Player
     {
-        private List<Piece> _pieces;
+        private List<Square> _pieces;
         private string _color;
 
 
-        public List<Piece> Pieces
+        public List<Square> Pieces
         {
             get { return _pieces; }
             set { _pieces = value; }
@@ -24,13 +24,15 @@ namespace ChessGridMVVM.Models
             set { _color = value; }
         }
 
-
-
-
         public Player(string color)
         {
             _color = color;
-            _pieces = new List<Piece>();
+            _pieces = new List<Square>();
+        }
+
+        private void getPieces()
+        {
+
         }
 
         public string OppositeColor()

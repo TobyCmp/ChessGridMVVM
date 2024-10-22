@@ -14,6 +14,7 @@ namespace ChessGridMVVM.Models
         protected int _value; 
         protected string _pieceSymbol;
         private string _pieceColor;
+        public abstract string Name { get; }
 
         public string PieceColor
         {
@@ -37,6 +38,7 @@ namespace ChessGridMVVM.Models
         {
             get;
         }
+
         public abstract bool isValidMove(Square startingSquare, Square endSquare);
 
 

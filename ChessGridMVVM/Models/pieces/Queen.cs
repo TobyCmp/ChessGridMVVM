@@ -8,6 +8,8 @@ namespace ChessGridMVVM.Models
 {
     public class Queen : Piece
     {
+        public override string Name => "Queen";
+
         public override string PieceSymbol => PieceColor == "White" ? "\u2655" : "\u265B";
 
         public override int Value => _value = 5;
@@ -29,7 +31,7 @@ namespace ChessGridMVVM.Models
                 return false;
 
             int dx = endCol - startCol;
-            int dy = endRow = startRow;
+            int dy = endRow - startRow;
 
             if (Math.Abs(dx) == Math.Abs(dy) || startCol == endCol || startRow == endRow)
             {

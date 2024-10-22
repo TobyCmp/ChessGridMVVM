@@ -8,6 +8,8 @@ namespace ChessGridMVVM.Models
 {
     public class Pawn : Piece
     {
+        public override string Name => "Pawn";
+
         public override string PieceSymbol => PieceColor == "White" ? "\u2659" : "\u265F";
 
         public override int Value => _value = 1;
