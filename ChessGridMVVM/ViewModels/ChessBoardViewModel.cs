@@ -72,25 +72,12 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    //public string CurrentPlayer
-    //{
-    //    get => _currentPlayer;
-    //    private set
-    //    {
-    //        if (_currentPlayer != value)
-    //        {
-    //            _currentPlayer = value;
-    //            OnPropertyChanged();
-    //        }
-    //    }
-    //}
 
     public ChessBoardViewModel()
     {
         Game = new Game();
         InitializeBoard();
         IntializePieces();
-        //CurrentPlayer = "White"; // White starts the game
     }
 
     private void InitializeBoard()
@@ -184,11 +171,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             s.RevertColor();
         }
     }
-    //private string GetCurrentPlayerPawnSymbol()
-    //{
-    //    return CurrentPlayer == "White" ? "\u2659" : "\u265F";
-    //}
-
 
     private void Move(int startRow, int startCol, int endRow, int endCol)
     {
@@ -205,41 +187,12 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
         startSquare.RevertColor();
         Game.nextTurn();
-
-        //if (endSquare == null || (endSquare.PieceSymbol != null && endSquare.PieceSymbol != startSquare.PieceSymbol))
-        //{
-        //    endSquare.PieceSymbol = startSquare.PieceSymbol;
-        //    startSquare.PieceSymbol = null;
-
-        //    if (_lastMovedSquare != null)
-        //    {
-        //        _lastMovedSquare.RevertColor();
-        //    }
-
-        //    endSquare.SetColour("green");
-        //    _lastMovedSquare = endSquare;
-        //}
     }
 
     private void Capture(Piece captured)
     {
         
     }
-
-    //public void NextTurn()
-    //{
-    //    if (_lastMovedSquare != null)
-    //    {
-    //        _lastMovedSquare.RevertColor();
-    //        _lastMovedSquare = null;
-    //    }
-    //}
-
-    //private void ToggleTurn()
-    //{
-    //    // Switch the current player
-    //    CurrentPlayer = CurrentPlayer == "White" ? "Black" : "White";
-    //}
 
     public event PropertyChangedEventHandler PropertyChanged;
 

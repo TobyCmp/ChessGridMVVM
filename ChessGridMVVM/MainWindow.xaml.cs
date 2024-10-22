@@ -24,10 +24,5 @@ namespace ChessGridMVVM
                 ViewModel.SelectSquare(dataContext.Row, dataContext.Column);
             }
         }
-
-        private void NextTurn_Click(object sender, RoutedEventArgs e)
-        {
-            //ViewModel.NextTurn();
-        }
     }
 }

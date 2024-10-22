@@ -49,11 +49,5 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
-        <!-- Display current player -->
-        <TextBlock Text="{Binding CurrentPlayer}" Grid.Row="1" FontSize="16" HorizontalAlignment="Center" Margin="5"/>
-
-        <!-- Button to simulate next turn --><!--
-        <Button Content="Next Turn" Grid.Row="1" Click="NextTurn_Click" />-->
     </Grid>
 </Window>
