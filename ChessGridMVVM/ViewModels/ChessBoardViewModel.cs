@@ -10,6 +10,9 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private Square _selectedSquare;  // Track the selected square
     private Square _lastMovedSquare; // Track the last moved square
     private string _currentPlayer;  // Track the current player
+    private string _primaryColor = "#769656";
+    private string _secondaryColor = "#eeeed2";
+    private string _highlightColor = "Red";
 
     public ObservableCollection<ObservableCollection<Square>> Board
     {
@@ -37,7 +40,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             if(value != null)
             {
                 _selectedSquare = value;
-                _selectedSquare.SetColour("Red");
+                _selectedSquare.SetColour(_highlightColor);
             }
             _selectedSquare = value;
             OnPropertyChanged();
@@ -73,7 +76,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
             for (int i = 0; i < Size; i++)
             {
-                var color = (i + j) % 2 == 1 ? "White" : "Black";
+                var color = (i + j) % 2 == 1 ? _primaryColor : _secondaryColor;
                 row.Add(new Square(color, j, i));
             }
             Board.Add(row);
