@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace ChessGridMVVM.Models
 {
-    public class Rook : Piece
+    public class Bishop : Piece
     {
         public override string PieceSymbol => PieceColor == "White" ? "\u2656" : "\u265C";
 
         public override int Value => _value = 5;
 
 
-        public Rook(string pieceColor) : base(pieceColor)
+        public Bishop(string pieceColor) : base(pieceColor)
         {
             
         }
@@ -28,14 +28,15 @@ namespace ChessGridMVVM.Models
             if (endRow < 0 || endRow > 7 || endCol < 0 || endCol > 7 || startSquare == endSquare || endSquare.Piece != null && startSquare.Piece.PieceColor == endSquare.Piece.PieceColor)
                 return false;
 
-            
+            int dx = endCol - startCol;
+            int dy = endRow = startRow;
 
-            if(startCol == endCol || startRow == endRow)
+            if (dx == dy)
             {
                 return true;
             }
 
             return false;
         }
-        }
+    }
     }

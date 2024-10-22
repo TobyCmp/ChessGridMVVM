@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System;
 
 public class ChessBoardViewModel : INotifyPropertyChanged
 {
@@ -17,6 +18,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private string _highlightColor = "Red";
     private string _posssiblemoveColor = "Cyan";
     private List<Square> _possibleMoves;
+
 
     public List<Square> PossibleMoves
     {
@@ -145,8 +147,31 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     public bool isValidMove(Square start, Square end)
     {
+        int dx = end.Column - start.Column;
+        int dy = end.Row - start.Row;
+
+        if(dx != dy && dx != 0 && dy != 0)
+        {
+            return false;
+        }
+
+        int yStep = dy == 0 ? 0 : dy / Math.Abs(dy);
+        int xStep = dx == 0 ? 0 : dx / Math.Abs(dx);
+
+        int currentRow = start.Row + yStep;
+        int currentColumn = start.Column + xStep;
+        while (currentRow != end.Row || currentColumn != end.Column)
+        {
+            if (Board[7 - currentRow][currentColumn].Piece != null)
+            {
+                return false;
+            }
+            currentRow = currentRow + yStep;
+            currentColumn = currentColumn + xStep;
+        }
         return start.Piece.isValidMove(start, end);
     }
+
     public void DrawValidMoves(Square selectedSquare)
     {
         PossibleMoves = new List<Square>();
@@ -155,7 +180,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         {
             for(int row = 0; row< Size; row++)
             {
-                if(selectedSquare.Piece.isValidMove(selectedSquare, Board[7- row][col]))
+                if(isValidMove(selectedSquare, Board[7- row][col]) == true)
                 {
                     Board[7 - row][col].SetColour(_posssiblemoveColor);
                     PossibleMoves.Add(Board[7 - row][col]);
