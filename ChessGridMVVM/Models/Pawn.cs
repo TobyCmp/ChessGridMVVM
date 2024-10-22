@@ -57,7 +57,7 @@ namespace ChessGridMVVM.Models
                 {
                     return true;
                 }
-                else if (endRow == startRow - 1 && (endCol == startCol + 1 || endCol == startCol - 1) && endSquare.Piece._pieceColor == "White") // take piece
+                else if (endRow == startRow - 1 && (endCol == startCol + 1 || endCol == startCol - 1) && endSquare.Piece != null && endSquare.Piece._pieceColor == "White") // take piece
                 {
                     return true;
                 }
