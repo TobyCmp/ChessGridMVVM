@@ -121,10 +121,11 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         Board[7][0].Piece = new Rook("White");
         Board[7][7].Piece = new Rook("White");
         Board[7][2].Piece = new Bishop("White");
+        Board[7][3].Piece = new Queen("White");
 
     }
 
-
+    // Select a square
     public void SelectSquare(int row, int col)
     {
         if (row >= 0 && row < Size && col >= 0 && col < Size)
@@ -146,38 +147,41 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
+    // Check if move from one cell to another is valid
     public bool isValidMove(Square start, Square end)
     {
-        //int dx = end.Column - start.Column;
-        //int dy = end.Row - start.Row;
+        int dx = end.Column - start.Column;
+        int dy = end.Row - start.Row;
 
-        //if (dx != dy && dx != 0 && dy != 0)
-        //{
-        //    return false;
-        //}
+        if (Math.Abs(dx) != Math.Abs(dy) && dx != 0 && dy != 0) // Check that move is either straight or diagonal 
+        {
+            return false;
+        }
 
-        //int yStep = dy == 0 ? 0 : dy / Math.Abs(dy);
-        //int xStep = dx == 0 ? 0 : dx / Math.Abs(dx);
+        int yStep = dy == 0 ? 0 : dy / Math.Abs(dy);
+        int xStep = dx == 0 ? 0 : dx / Math.Abs(dx);
+        int currentRow = start.Row + yStep;
+        int currentColumn = start.Column + xStep;
 
-        //int currentRow = start.Row + yStep;
-        //int currentColumn = start.Column + xStep;
-        //while (currentRow != end.Row || currentColumn != end.Column)
-        //{
-        //    if (Board[7 - currentRow][currentColumn].Piece != null)
-        //    {
-        //        return false;
-        //    }
-        //    currentRow = currentRow + yStep;
-        //    currentColumn = currentColumn + xStep;
-        //}
+        while (currentRow != end.Row || currentColumn != end.Column) // Check if there exists a piece in any square between start and end 
+        {
+            if (Board[7 - currentRow][currentColumn].Piece != null)
+            {
+                return false;
+            }
+            currentRow = currentRow + yStep;
+            currentColumn = currentColumn + xStep;
+        }
+
         return start.Piece.isValidMove(start, end);
     }
 
-    public void DrawValidMoves(Square selectedSquare)
+    // Highlight selected cell and highlight all valid moves from that cell
+    public void DrawValidMoves(Square selectedSquare) 
     {
         PossibleMoves = new List<Square>();
         selectedSquare.SetColour(_highlightColor);
-        for(int col = 0; col < Size; col++)
+        for(int col = 0; col < Size; col++) // For each xy coordinate, check if the piece has a valid move
         {
             for(int row = 0; row< Size; row++)
             {
@@ -190,6 +194,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
+    // Remove the highlighting of possible move cells
     public void removeValidMoves()
     {
         foreach(Square s in PossibleMoves)
@@ -198,6 +203,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
+    // Move piece from one cell to another
     private void Move(int startRow, int startCol, int endRow, int endCol)
     {
         var startSquare = Board[7- startRow][startCol];
@@ -213,11 +219,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
         startSquare.RevertColor();
         Game.nextTurn();
-    }
-
-    private void Capture(Piece captured)
-    {
-        
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
