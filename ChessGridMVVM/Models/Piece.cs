@@ -13,12 +13,19 @@ namespace ChessGridMVVM.Models
     {
         protected int _value; 
         protected string _pieceSymbol;
-        public string _pieceColor { get; set; }
+        private string _pieceColor;
+
+        public string PieceColor
+        {
+            get { return _pieceColor; }
+            set { _pieceColor = value; }
+        }
+
 
 
         public Piece(string pieceColor)
         {
-            _pieceColor = pieceColor;
+            PieceColor = pieceColor;
         }
 
         public abstract string PieceSymbol // allows each piece to set its own pieceSymbol

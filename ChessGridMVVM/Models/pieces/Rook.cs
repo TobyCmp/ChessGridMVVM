@@ -8,7 +8,7 @@ namespace ChessGridMVVM.Models
 {
     public class Rook : Piece
     {
-        public override string PieceSymbol => _pieceColor == "White" ? "\u2656" : "\u265C";
+        public override string PieceSymbol => PieceColor == "White" ? "\u2656" : "\u265C";
 
         public override int Value => _value = 5;
 
@@ -25,8 +25,10 @@ namespace ChessGridMVVM.Models
             var endRow = endSquare.Row;
             var endCol = endSquare.Column;
 
-            if (endRow < 0 || endRow > 7 || endCol < 0 || endCol > 7)
+            if (endRow < 0 || endRow > 7 || endCol < 0 || endCol > 7 || startingSquare == endSquare)
                 return false;
+
+            
 
             if(startCol == endCol || startRow == endRow)
             {

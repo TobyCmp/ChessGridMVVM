@@ -8,7 +8,7 @@ namespace ChessGridMVVM.Models
 {
     public class Pawn : Piece
     {
-        public override string PieceSymbol => _pieceColor == "White" ? "\u2659" : "\u265F";
+        public override string PieceSymbol => PieceColor == "White" ? "\u2659" : "\u265F";
 
         public override int Value => _value = 1;
 
@@ -24,11 +24,11 @@ namespace ChessGridMVVM.Models
             var endRow = endSquare.Row;
             var endCol = endSquare.Column;
 
-            if (endRow < 0 || endRow > 7 || endCol < 0 || endCol > 7)
+            if (endRow < 0 || endRow > 7 || endCol < 0 || endCol > 7 || startingSquare == endSquare)
                 return false;
-
+            
             // White pawn movement
-            if (_pieceColor == "White")
+            if (PieceColor == "White")
             {
                 if (endRow == startRow + 1 && startCol == endCol && endSquare.Piece == null) // +1 Vertically
                 {
@@ -40,14 +40,14 @@ namespace ChessGridMVVM.Models
                     return true;
                 }
 
-                else if (endRow == startRow + 1 && (endCol == startCol + 1 || endCol == startCol - 1) && endSquare.Piece != null && endSquare.Piece._pieceColor == "Black") // take piece
+                else if (endRow == startRow + 1 && (endCol == startCol + 1 || endCol == startCol - 1) && endSquare.Piece != null && endSquare.Piece.PieceColor == "Black") // take piece
                 {
                     return true;
                 }
             }
 
             // Black pawn movement
-            else if (_pieceColor == "Black")
+            else if (PieceColor == "Black")
             {
                 if (endRow == startRow - 1 && startCol == endCol && endSquare.Piece == null) // +1 Vertically
                 {
@@ -57,7 +57,7 @@ namespace ChessGridMVVM.Models
                 {
                     return true;
                 }
-                else if (endRow == startRow - 1 && (endCol == startCol + 1 || endCol == startCol - 1) && endSquare.Piece != null && endSquare.Piece._pieceColor == "White") // take piece
+                else if (endRow == startRow - 1 && (endCol == startCol + 1 || endCol == startCol - 1) && endSquare.Piece != null && endSquare.Piece.PieceColor == "White") // take piece
                 {
                     return true;
                 }

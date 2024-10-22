@@ -1,10 +1,12 @@
 ﻿using ChessGridMVVM.Models;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 public class ChessBoardViewModel : INotifyPropertyChanged
 {
+    private Game _game;
     private const int Size = 8;  // Size of the chessboard
     private ObservableCollection<ObservableCollection<Square>> _board;
     private Square _selectedSquare;  // Track the selected square
@@ -13,7 +15,31 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private string _primaryColor = "#769656";
     private string _secondaryColor = "#eeeed2";
     private string _highlightColor = "Red";
+    private string _posssiblemoveColor = "Cyan";
+    private List<Square> _possibleMoves;
 
+    public List<Square> PossibleMoves
+    {
+        get => _possibleMoves;
+
+        set
+        {
+            _possibleMoves = value;
+        }
+
+    }
+
+    public Game Game
+    {
+        get => _game;
+        set
+        {
+            if (_game != value)
+            {
+                _game = value;
+            }
+        }
+    }
     public ObservableCollection<ObservableCollection<Square>> Board
     {
         get => _board;
@@ -34,13 +60,13 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         {
             if(_selectedSquare != null)
             {
-                _selectedSquare.RevertColor();
+                removeValidMoves();
 
             }
             if(value != null)
             {
                 _selectedSquare = value;
-                _selectedSquare.SetColour(_highlightColor);
+                DrawValidMoves(_selectedSquare);
             }
             _selectedSquare = value;
             OnPropertyChanged();
@@ -61,6 +87,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     public ChessBoardViewModel()
     {
+        Game = new Game();
         InitializeBoard();
         IntializePieces();
         //CurrentPlayer = "White"; // White starts the game
@@ -112,16 +139,16 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     {
         if (row >= 0 && row < Size && col >= 0 && col < Size)
         {
-            if(SelectedSquare == null && Board[7-row][col].Piece != null) // Select first piece
+            if(SelectedSquare == null && Board[7-row][col].Piece != null && Game.CurrentPlayer.Color == Board[7 - row][col].Piece.PieceColor) // Select first piece
             {
                 SelectedSquare = Board[7 - row][col];
             }
-            else if(SelectedSquare != null && Board[7 - row][col].Piece != null && Board[7 - row][col].Piece._pieceColor == SelectedSquare.Piece._pieceColor) // If second selected piece is one of own, update selected piece
+            else if(SelectedSquare != null && Board[7 - row][col].Piece != null && Board[7 - row][col].Piece.PieceColor == SelectedSquare.Piece.PieceColor) // If second selected piece is one of own, update selected piece
             {
                 SelectedSquare.RevertColor();
                 SelectedSquare = Board[7 - row][col];
             }
-            else if(SelectedSquare != null && SelectedSquare.Piece != null && SelectedSquare.Piece.isValidMove(SelectedSquare, Board[7 - row][col]) == true)
+            else if(SelectedSquare != null && SelectedSquare.Piece != null && isValidMove(SelectedSquare, Board[7 - row][col]) == true) // 
             {
                 Move(SelectedSquare.Row, SelectedSquare.Column, row, col);
                 SelectedSquare = null;
@@ -129,7 +156,34 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
+    public bool isValidMove(Square start, Square end)
+    {
+        return start.Piece.isValidMove(start, end);
+    }
+    public void DrawValidMoves(Square selectedSquare)
+    {
+        PossibleMoves = new List<Square>();
+        selectedSquare.SetColour(_highlightColor);
+        for(int col = 0; col < Size; col++)
+        {
+            for(int row = 0; row< Size; row++)
+            {
+                if(selectedSquare.Piece.isValidMove(selectedSquare, Board[7- row][col]))
+                {
+                    Board[7 - row][col].SetColour(_posssiblemoveColor);
+                    PossibleMoves.Add(Board[7 - row][col]);
+                }
+            }
+        }
+    }
 
+    public void removeValidMoves()
+    {
+        foreach(Square s in PossibleMoves)
+        {
+            s.RevertColor();
+        }
+    }
     //private string GetCurrentPlayerPawnSymbol()
     //{
     //    return CurrentPlayer == "White" ? "\u2659" : "\u265F";
@@ -150,7 +204,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         startSquare.Piece = null;
 
         startSquare.RevertColor();
-
+        Game.nextTurn();
 
         //if (endSquare == null || (endSquare.PieceSymbol != null && endSquare.PieceSymbol != startSquare.PieceSymbol))
         //{
