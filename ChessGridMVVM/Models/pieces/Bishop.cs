@@ -8,7 +8,7 @@ namespace ChessGridMVVM.Models
 {
     public class Bishop : Piece
     {
-        public override string PieceSymbol => PieceColor == "White" ? "\u2656" : "\u265C";
+        public override string PieceSymbol => PieceColor == "White" ? "\u2657" : "\u265D";
 
         public override int Value => _value = 5;
 
@@ -29,9 +29,9 @@ namespace ChessGridMVVM.Models
                 return false;
 
             int dx = endCol - startCol;
-            int dy = endRow = startRow;
+            int dy = endRow - startRow;
 
-            if (dx == dy)
+            if (Math.Abs(dx) == Math.Abs(dy))
             {
                 return true;
             }

@@ -31,7 +31,7 @@ namespace ChessGridMVVM.Models
             int dx = endCol - startCol;
             int dy = endRow = startRow;
 
-            if (dx == dy)
+            if (Math.Abs(dx) == Math.Abs(dy) || startCol == endCol || startRow == endRow)
             {
                 return true;
             }

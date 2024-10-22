@@ -120,6 +120,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         Board[0][7].Piece = new Rook("Black");
         Board[7][0].Piece = new Rook("White");
         Board[7][7].Piece = new Rook("White");
+        Board[7][2].Piece = new Bishop("White");
 
     }
 
@@ -147,28 +148,28 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     public bool isValidMove(Square start, Square end)
     {
-        int dx = end.Column - start.Column;
-        int dy = end.Row - start.Row;
+        //int dx = end.Column - start.Column;
+        //int dy = end.Row - start.Row;
 
-        if(dx != dy && dx != 0 && dy != 0)
-        {
-            return false;
-        }
+        //if (dx != dy && dx != 0 && dy != 0)
+        //{
+        //    return false;
+        //}
 
-        int yStep = dy == 0 ? 0 : dy / Math.Abs(dy);
-        int xStep = dx == 0 ? 0 : dx / Math.Abs(dx);
+        //int yStep = dy == 0 ? 0 : dy / Math.Abs(dy);
+        //int xStep = dx == 0 ? 0 : dx / Math.Abs(dx);
 
-        int currentRow = start.Row + yStep;
-        int currentColumn = start.Column + xStep;
-        while (currentRow != end.Row || currentColumn != end.Column)
-        {
-            if (Board[7 - currentRow][currentColumn].Piece != null)
-            {
-                return false;
-            }
-            currentRow = currentRow + yStep;
-            currentColumn = currentColumn + xStep;
-        }
+        //int currentRow = start.Row + yStep;
+        //int currentColumn = start.Column + xStep;
+        //while (currentRow != end.Row || currentColumn != end.Column)
+        //{
+        //    if (Board[7 - currentRow][currentColumn].Piece != null)
+        //    {
+        //        return false;
+        //    }
+        //    currentRow = currentRow + yStep;
+        //    currentColumn = currentColumn + xStep;
+        //}
         return start.Piece.isValidMove(start, end);
     }
 
