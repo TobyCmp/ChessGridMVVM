@@ -46,13 +46,12 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     {
         get => _selectedSquare;
         set
-        {
-            if(_selectedSquare != null)
+        { 
+            if (_selectedSquare != null)
             {
                 removeValidMoves(_selectedSquare);
-
             }
-            if(value != null)
+            if (value != null )
             {
                 _selectedSquare = value;
                 drawValidMoves(_selectedSquare);
@@ -96,13 +95,11 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 if(j == 1)
                 {
                     Board[7-j][i].Piece = new Pawn("White");
-                    Game.WhitePlayer.Pieces.Add(Board[7 - j][i]);
                 }
 
                 if (j == 6)
                 {
                     Board[7-j][i].Piece = new Pawn("Black");
-                    Game.BlackPlayer.Pieces.Add(Board[7 - j][i]);
                 }
             }
         }
@@ -113,8 +110,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         Board[7][2].Piece = new Bishop("White");
         Board[7][3].Piece = new Queen("White");
         Board[5][4].Piece = new King("White");
-        Game.WhitePlayer.Pieces.Add(Board[5][4]);
-
 
     }
 
@@ -137,8 +132,9 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             }
             else if(SelectedSquare != null && SelectedSquare.Piece != null && isValidMove(SelectedSquare, Board[7 - row][col]) == true) // 
             {
-                Move(SelectedSquare.Row, SelectedSquare.Column, row, col);
+                Square s = SelectedSquare;
                 SelectedSquare = null;
+                Move(s.Row, s.Column, row, col);
             }
         }
     }
@@ -146,6 +142,10 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     // Check if move from one cell to another is valid
     public bool isValidMove(Square start, Square end)
     {
+        if (start.Piece == null)
+        {
+            return false;
+        }
         int dx = end.Column - start.Column;
         int dy = end.Row - start.Row;
         int yStep = dy == 0 ? 0 : dy / Math.Abs(dy);
@@ -153,15 +153,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         int currentRow = start.Row + yStep;
         int currentColumn = start.Column + xStep;
 
-        if(start.Piece.Name == "King")
-        {
-            List<Square> list = returnThreats(end);
-            if(list.Count == 0)
-            {
-                return start.Piece.isValidMove(start, end);
-            }
-            return false;
-        }
+        
         if (Math.Abs(dx) != Math.Abs(dy) && dx != 0 && dy != 0) // Check that move is either straight or diagonal 
         {
             return false;
@@ -178,8 +170,22 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             currentColumn = currentColumn + xStep;
         }
 
+        if(start.Piece.Name == "King")
+        {
+            List<Square> threats = new List<Square>();
+            threats = getThreats(end, start.Piece.PieceColor);
+
+            if (threats.Count == 0)
+            {
+                return start.Piece.isValidMove(start, end);
+            }
+
+            return false;
+        }
+
         return start.Piece.isValidMove(start, end);
     }
+
 
     // Highlight selected cell and highlight all valid moves from that cell
     public List<Square> getValidMoves(Square selectedSquare) 
@@ -234,44 +240,27 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         startSquare.RevertColor();
         Game.nextTurn();
     }
-    private List<Square> returnThreats(Square originalSquare)
+
+
+
+    // Doesnt work for king and pawns
+    private List<Square> getThreats(Square checkSquare, string color)
     {
         List<Square> threats = new List<Square>();
-
-        // Check the color of the original square's piece
-        if (originalSquare.Piece.PieceColor == "White")
+        Square s;
+        for(int i = 0; i<Size; i++)
         {
-            // Loop through each black piece on the board
-            foreach (Square square in Game.BlackPlayer.Pieces)
+            for(int j = 0; j < Size; j++)
             {
-                // Get all valid moves for the current black piece
-                List<Square> validMoves = getValidMoves(square);
-
-                // Check if any of the valid moves threaten the original square
-                foreach (Square moveSquare in validMoves)
+                s = Board[7 - j][i];
+                if (s.Piece != null && s.Piece.PieceColor != color)
                 {
-                    if (moveSquare == originalSquare)
+                    if(s.Piece.isValidMove(s, checkSquare) == true)
                     {
-                        threats.Add(square); // Add the threatening piece's square
-                    }
-                }
-            }
-        }
-        else if (originalSquare.Piece.PieceColor == "Black")
-        {
-            // Loop through each white piece on the board
-            foreach (Square square in Game.WhitePlayer.Pieces)
-            {
-                // Get all valid moves for the current white piece
-                List<Square> validMoves = getValidMoves(square);
 
-                // Check if any of the valid moves threaten the original square
-                foreach (Square moveSquare in validMoves)
-                {
-                    if (moveSquare == originalSquare)
-                    {
-                        threats.Add(square); // Add the threatening piece's square
+                            threats.Add(s)
                     }
+
                 }
             }
         }
@@ -315,16 +304,16 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     //        }
 
     //    }
-        
+
     //    return threats;
     //}
 
-    public bool isThreatened(Square originalSquare)
-    {
-        if(returnThreats(originalSquare).Count > 0 ) return true;
+    //public bool isThreatened(Square originalSquare)
+    //{
+    //    if(returnThreats(originalSquare).Count > 0 ) return true;
 
-        return false;
-    }
+    //    return false;
+    //}
     private void Capture(Piece p)
     {
 
