@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System;
+using System.Windows;
 
 public class ChessBoardViewModel : INotifyPropertyChanged
 {
@@ -255,13 +256,26 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 s = Board[7 - j][i];
                 if (s.Piece != null && s.Piece.PieceColor != color)
                 {
-                    if(s.Piece.isValidMove(s, checkSquare) == true)
+                    if(s.Piece.isValidMove(s, checkSquare) == true && s.Piece.Name != "Pawn")
                     {
 
-                            threats.Add(s)
+                        threats.Add(s);
+                    }
+
+                    if(s.Piece.Name == "Pawn")
+                    {
+                        if (s.Piece.PieceColor == "White")
+                        {
+
+                        }
+                        else if (checkSquare.Row == s.Row + 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1) && s.Piece.PieceColor == "White")
+                        {
+                            endRow == startRow + 1 && (endCol == startCol + 1 || endCol == startCol - 1) && endSquare.Piece != null && endSquare.Piece.PieceColor == "Black"
+                        }
                     }
 
                 }
+
             }
         }
 
