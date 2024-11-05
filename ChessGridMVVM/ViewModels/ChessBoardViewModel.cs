@@ -244,7 +244,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
 
 
-    // Doesnt work for king and pawns
     private List<Square> getThreats(Square checkSquare, string color)
     {
         List<Square> threats = new List<Square>();
@@ -262,15 +261,15 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                         threats.Add(s);
                     }
 
-                    if(s.Piece.Name == "Pawn")
+                    if(s.Piece.Name == "Pawn") // check for pawn capture
                     {
-                        if (s.Piece.PieceColor == "White")
+                        if (s.Piece.PieceColor == "White" && checkSquare.Row == s.Row + 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
                         {
-
+                            threats.Add(s);
                         }
-                        else if (checkSquare.Row == s.Row + 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1) && s.Piece.PieceColor == "White")
+                        else if (s.Piece.PieceColor == "Black" && checkSquare.Row == s.Row - 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
                         {
-                            endRow == startRow + 1 && (endCol == startCol + 1 || endCol == startCol - 1) && endSquare.Piece != null && endSquare.Piece.PieceColor == "Black"
+                            threats.Add(s);
                         }
                     }
 
