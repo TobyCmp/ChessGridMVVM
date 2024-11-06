@@ -12,12 +12,10 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private const int Size = 8;  // Size of the chessboard
     private ObservableCollection<ObservableCollection<Square>> _board;
     private Square _selectedSquare;  // Track the selected square
-    private Square _lastMovedSquare; // Track the last moved square
-    private string _currentPlayer;  // Track the current player
-    private string _primaryColor = "#769656";
-    private string _secondaryColor = "#eeeed2";
-    private string _highlightColor = "Red";
-    private string _posssiblemoveColor = "Cyan";
+    private readonly string _primaryColor = "#769656";
+    private readonly string _secondaryColor = "#eeeed2";
+    private readonly string _highlightColor = "Red";
+    private readonly string _possiblemoveColor = "Cyan";
 
     public Game Game
     {
@@ -62,9 +60,9 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
-    public ChessBoardViewModel()
+    public ChessBoardViewModel(Game game)
     {
-        Game = new Game();
+        Game = game; // accepts game instance
         InitializeBoard();
         IntializePieces();
     }
@@ -210,7 +208,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         List<Square> l = getValidMoves(s);
         foreach (Square square in l)
         {
-            square.SetColour(_posssiblemoveColor);
+            square.SetColour(_possiblemoveColor);
         }
     }
 
@@ -281,52 +279,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         return threats;
     }
 
-    //private List<Square> returnThreats(Square originalSquare)
-    //{
-    //    List<Square> allMoves = new List<Square>();
-    //    List<Square> threats = new List<Square>();
-
-    //    if (originalSquare.Piece.PieceColor == "White")
-    //    {
-    //        foreach(Square square in Game.BlackPlayer.Pieces)
-    //        {
-    //            getValidMoves(square);
-    //            foreach(Square moveSquare in PossibleMoves)
-    //            {
-    //                if(moveSquare == originalSquare)
-    //                {
-    //                    threats.Add(square);
-    //                }
-    //            }
-    //        }
-
-    //    }
-
-    //    if (originalSquare.Piece.PieceColor == "Black")
-    //    {
-    //        foreach (Square square in Game.WhitePlayer.Pieces)
-    //        {
-    //            getValidMoves(square);
-    //            foreach (Square moveSquare in PossibleMoves)
-    //            {
-    //                if (moveSquare == originalSquare)
-    //                {
-    //                    threats.Add(square);
-    //                }
-    //            }
-    //        }
-
-    //    }
-
-    //    return threats;
-    //}
-
-    //public bool isThreatened(Square originalSquare)
-    //{
-    //    if(returnThreats(originalSquare).Count > 0 ) return true;
-
-    //    return false;
-    //}
     private void Capture(Piece p)
     {
 

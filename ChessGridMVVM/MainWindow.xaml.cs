@@ -11,8 +11,13 @@ namespace ChessGridMVVM
 
         public MainWindow()
         {
+
+            //InitializeComponent();
+            //DataContext = new ChessBoardViewModel();
+
             InitializeComponent();
-            DataContext = new ChessBoardViewModel();
+            var game = new Game(); // create an instance of the game
+            DataContext = game.ChessBoardViewModel;
         }
 
         private void Square_Click(object sender, MouseButtonEventArgs e)
