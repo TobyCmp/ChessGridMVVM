@@ -26,15 +26,17 @@ namespace ChessGridMVVM.Models
 
         public Game()
         {
+            ChessBoardViewModel = new ChessBoardViewModel(this);
             WhitePlayer = new Player("White");
             BlackPlayer = new Player("Black");
-
             CurrentPlayer = WhitePlayer;
         }
+
 
         public void nextTurn()
         {
            CurrentPlayer = CurrentPlayer == WhitePlayer ? BlackPlayer : WhitePlayer;
+
         }
     }
 }
