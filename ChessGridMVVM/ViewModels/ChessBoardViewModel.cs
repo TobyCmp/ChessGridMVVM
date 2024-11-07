@@ -109,6 +109,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         Board[7][2].Piece = new Bishop("White");
         Board[7][3].Piece = new Queen("White");
         Board[5][4].Piece = new King("White");
+        Board[4][5].Piece = new Knight("White");
 
     }
 
@@ -151,8 +152,14 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         int xStep = dx == 0 ? 0 : dx / Math.Abs(dx);
         int currentRow = start.Row + yStep;
         int currentColumn = start.Column + xStep;
+        bool validmove = false;
+        validmove = start.Piece.isValidMove(start, end);
 
-        
+        if(start.Piece.Name == "Knight")
+        {
+            return validmove;
+        }
+
         if (Math.Abs(dx) != Math.Abs(dy) && dx != 0 && dy != 0) // Check that move is either straight or diagonal 
         {
             return false;
@@ -169,20 +176,21 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             currentColumn = currentColumn + xStep;
         }
 
-        if(start.Piece.Name == "King")
+
+
+        if (start.Piece.Name == "King")
         {
             List<Square> threats = new List<Square>();
             threats = getThreats(end, start.Piece.PieceColor);
-
             if (threats.Count == 0)
             {
-                return start.Piece.isValidMove(start, end);
+                return validmove;
             }
 
             return false;
         }
 
-        return start.Piece.isValidMove(start, end);
+        return validmove;
     }
 
 

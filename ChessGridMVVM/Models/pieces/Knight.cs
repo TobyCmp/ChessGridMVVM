@@ -33,7 +33,7 @@ namespace ChessGridMVVM.Models
             int dx = endCol - startCol;
             int dy = endRow - startRow;
 
-            if (Math.Abs(dx) == Math.Abs(dy))
+            if (dx == 1 && dy == 2 || dx == 1 && dy == -2 ||dx == 2 && dy == 1 || dx == 2 && dy == -1 || dx == -1 && dy == 2 || dx == -1 && dy == -2 || dx == -2 && dy == 1 || dx == -2 && dy == -1)
             {
                 return true;
             }
