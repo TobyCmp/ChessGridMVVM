@@ -8,7 +8,7 @@ namespace ChessGridMVVM.Models
 {
     public class Game
     {
-        public ChessBoardViewModel ChessBoardViewModel { get; set;}
+        public ChessBoardViewModel ChessBoardViewModel { get; set; }
         public Player WhitePlayer { get; set; }
 
         public Player BlackPlayer { get; set; }
@@ -18,7 +18,7 @@ namespace ChessGridMVVM.Models
         public Player CurrentPlayer
         {
             get { return _currentPlayer; }
-            set 
+            set
             {
                 _currentPlayer = value;
             }
@@ -35,8 +35,13 @@ namespace ChessGridMVVM.Models
 
         public void nextTurn()
         {
-           CurrentPlayer = CurrentPlayer == WhitePlayer ? BlackPlayer : WhitePlayer;
+            CurrentPlayer = CurrentPlayer == WhitePlayer ? BlackPlayer : WhitePlayer;
 
+        }
+
+        public void endGame()
+        {
+            System.Environment.Exit(1);
         }
     }
 }

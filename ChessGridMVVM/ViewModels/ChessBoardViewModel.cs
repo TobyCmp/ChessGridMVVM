@@ -235,12 +235,58 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
         endSquare.Piece = startSquare.Piece;
         startSquare.Piece = null;
-
         startSquare.RevertColor();
+
+        checkPromotion(endSquare);
+        checkCheckmate();
         Game.nextTurn();
     }
 
+    public void checkPromotion(Square endsquare)
+    {
+        if(endsquare.Row == 7 && endsquare.Piece.Name == "Pawn" || endsquare.Row == 0 && endsquare.Piece.Name == "Pawn")
+        {
+            endsquare.Piece = new Queen(endsquare.Piece.PieceColor);
+        }
+    }
 
+    public void checkCheckmate()
+    {
+        Square s;
+        List<Square> validmoves;
+        List<Square> threats;
+        for (int i = 0; i < Size; i++)
+        {
+            for (int j = 0; j < Size; j++)
+            {
+                s = Board[7 - j][i];
+                if (s.Piece != null && s.Piece.Name == "King")
+                {
+                    if(s.Piece.PieceColor == "White")
+                    {
+                        validmoves = getValidMoves(s);
+                        threats = getThreats(s, "White");
+                        
+                        if(validmoves.Count == 0 && threats.Count > 0)
+                        {
+                            Game.endGame();
+                        }
+                    }
+
+                    if (s.Piece != null && s.Piece.PieceColor == "Black")
+                    {
+                        validmoves = getValidMoves(s);
+                        threats = getThreats(s, "Black");
+                        if (validmoves.Count == 0 && threats.Count > 0)
+                        {
+                            Game.endGame();
+                        }
+
+                    }
+                }
+            }
+        }
+    }
 
     private List<Square> getThreats(Square checkSquare, string color)
     {
