@@ -10,7 +10,7 @@ namespace ChessGridMVVM.Models
     {
         public override string Name => "Knight";
 
-        public override string PieceSymbol => PieceColor == "White" ? "\u2657" : "\u265D";
+        public override string PieceSymbol => PieceColor == "White" ? "\u2658" : "\u265E";
 
         public override int Value => _value = 5;
 
