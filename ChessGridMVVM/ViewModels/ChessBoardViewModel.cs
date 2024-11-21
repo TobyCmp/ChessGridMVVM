@@ -91,15 +91,15 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         {
             for(int i = 0; i < Size; i++)
             {
-                if(j == 1)
-                {
-                    Board[7-j][i].Piece = new Pawn("White");
-                }
+                //if(j == 1)
+                //{
+                //    Board[7-j][i].Piece = new Pawn("White");
+                //}
 
-                if (j == 6)
-                {
-                    Board[7-j][i].Piece = new Pawn("Black");
-                }
+                //if (j == 6)
+                //{
+                //    Board[7-j][i].Piece = new Pawn("Black");
+                //}
             }
         }
         Board[0][0].Piece = new Rook("Black");
@@ -110,6 +110,9 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         Board[7][3].Piece = new Queen("White");
         Board[5][4].Piece = new King("White");
         Board[4][5].Piece = new Knight("White");
+        Board[0][3].Piece = new King("Black");
+        Board[0][4].Piece = new Rook("Black");
+
 
     }
 
@@ -133,8 +136,14 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             else if(SelectedSquare != null && SelectedSquare.Piece != null && isValidMove(SelectedSquare, Board[7 - row][col]) == true) // 
             {
                 Square s = SelectedSquare;
-                SelectedSquare = null;
-                Move(s.Row, s.Column, row, col);
+                if (SelectedSquare.Piece is King)
+                {
+                    if (isThreatened(Board[7 - row][col], SelectedSquare.Piece.PieceColor) == false)
+                    {
+                        SelectedSquare = null;
+                        Move(s.Row, s.Column, row, col);
+                    }
+                }
             }
         }
     }
@@ -155,6 +164,11 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         bool validmove = false;
         validmove = start.Piece.isValidMove(start, end);
 
+        if(validmove == false)
+        {
+            return false;
+        }
+
         if(start.Piece.Name == "Knight")
         {
             return validmove;
@@ -174,20 +188,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             }
             currentRow = currentRow + yStep;
             currentColumn = currentColumn + xStep;
-        }
-
-
-
-        if (start.Piece.Name == "King")
-        {
-            List<Square> threats = new List<Square>();
-            threats = getThreats(end, start.Piece.PieceColor);
-            if (threats.Count == 0)
-            {
-                return validmove;
-            }
-
-            return false;
         }
 
         return validmove;
@@ -260,77 +260,64 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     public void checkCheckmate()
     {
-        Square s;
-        List<Square> validmoves;
-        List<Square> threats;
-        for (int i = 0; i < Size; i++)
-        {
-            for (int j = 0; j < Size; j++)
-            {
-                s = Board[7 - j][i];
-                if (s.Piece != null && s.Piece.Name == "King")
-                {
-                    if(s.Piece.PieceColor == "White")
-                    {
-                        validmoves = getValidMoves(s);
-                        threats = getThreats(s, "White");
+        //Square s;
+        //List<Square> validmoves;
+        //List<Square> threats;
+        //for (int i = 0; i < Size; i++)
+        //{
+        //    for (int j = 0; j < Size; j++)
+        //    {
+        //        s = Board[7 - j][i];
+        //        if (s.Piece != null && s.Piece.Name == "King")
+        //        {
+        //            if(s.Piece.PieceColor == "White")
+        //            {
+        //                validmoves = getValidMoves(s);
+        //                threats = getThreats(s, "White");
                         
-                        if(validmoves.Count == 0 && threats.Count > 0)
-                        {
-                            Game.endGame();
-                        }
-                    }
+        //                if(validmoves.Count == 0 && threats.Count > 0)
+        //                {
+        //                    Game.endGame();
+        //                }
+        //            }
 
-                    if (s.Piece != null && s.Piece.PieceColor == "Black")
-                    {
-                        validmoves = getValidMoves(s);
-                        threats = getThreats(s, "Black");
-                        if (validmoves.Count == 0 && threats.Count > 0)
-                        {
-                            Game.endGame();
-                        }
+        //            if (s.Piece != null && s.Piece.PieceColor == "Black")
+        //            {
+        //                validmoves = getValidMoves(s);
+        //                threats = getThreats(s, "Black");
+        //                if (validmoves.Count == 0 && threats.Count > 0)
+        //                {
+        //                    Game.endGame();
+        //                }
 
-                    }
-                }
-            }
-        }
+        //            }
+        //        }
+        //    }
+        //}
     }
 
-    private List<Square> getThreats(Square checkSquare, string color)
+    private bool isThreatened(Square checkSquare, string color)
     {
-        List<Square> threats = new List<Square>();
+
         Square s;
-        for(int i = 0; i<Size; i++)
+        for(int i = 0; i < 8; i++)
         {
-            for(int j = 0; j < Size; j++)
+            for(int j = 0; j< 8; j++)
             {
                 s = Board[7 - j][i];
-                if (s.Piece != null && s.Piece.PieceColor != color)
+                if(s.Piece != null && s.Piece.PieceColor != color)
                 {
-                    if(s.Piece.isValidMove(s, checkSquare) == true && s.Piece.Name != "Pawn")
+                    s.Color = "Red";
+                    if (isValidMove(s, checkSquare))
                     {
-
-                        threats.Add(s);
+                        s.Color = "Blue";
+                        return true;
                     }
-
-                    if(s.Piece.Name == "Pawn") // check for pawn capture
-                    {
-                        if (s.Piece.PieceColor == "White" && checkSquare.Row == s.Row + 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
-                        {
-                            threats.Add(s);
-                        }
-                        else if (s.Piece.PieceColor == "Black" && checkSquare.Row == s.Row - 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
-                        {
-                            threats.Add(s);
-                        }
-                    }
-
                 }
-
             }
         }
 
-        return threats;
+        return false;
     }
 
     private void Capture(Piece p)
