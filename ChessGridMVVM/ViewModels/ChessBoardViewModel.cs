@@ -136,13 +136,19 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             else if(SelectedSquare != null && SelectedSquare.Piece != null && isValidMove(SelectedSquare, Board[7 - row][col]) == true) // 
             {
                 Square s = SelectedSquare;
+                string color = s.Piece.PieceColor;
                 if (SelectedSquare.Piece is King)
                 {
-                    if (isThreatened(Board[7 - row][col], SelectedSquare.Piece.PieceColor) == false)
+                    if (isThreatened(Board[7 - row][col], color) == false)
                     {
                         SelectedSquare = null;
                         Move(s.Row, s.Column, row, col);
                     }
+                }
+                else
+                {
+                    SelectedSquare = null;
+                    Move(s.Row, s.Column, row, col);
                 }
             }
         }
@@ -208,6 +214,23 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 }
             }
         }
+        if(selectedSquare.Piece is King && possMoves.Count>0)
+        {
+            List<Square> templist = new List<Square>();
+            string color = selectedSquare.Piece.PieceColor;
+            selectedSquare.Piece = null;
+            for (int i = 0; i < possMoves.Count; i++)
+            {
+                if (isThreatened(possMoves[i], color) == false)
+                {
+                    templist.Add(possMoves[i]);
+                }
+            }
+            selectedSquare.Piece = new King(color);
+
+            return templist;
+        }
+
         return possMoves;
     }
 
@@ -260,40 +283,24 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     public void checkCheckmate()
     {
-        //Square s;
-        //List<Square> validmoves;
-        //List<Square> threats;
-        //for (int i = 0; i < Size; i++)
-        //{
-        //    for (int j = 0; j < Size; j++)
-        //    {
-        //        s = Board[7 - j][i];
-        //        if (s.Piece != null && s.Piece.Name == "King")
-        //        {
-        //            if(s.Piece.PieceColor == "White")
-        //            {
-        //                validmoves = getValidMoves(s);
-        //                threats = getThreats(s, "White");
-                        
-        //                if(validmoves.Count == 0 && threats.Count > 0)
-        //                {
-        //                    Game.endGame();
-        //                }
-        //            }
+        Square s;
+        List<Square> validmoves;
+        for (int i = 0; i < Size; i++)
+        {
+            for (int j = 0; j < Size; j++)
+            {
+                s = Board[7 - j][i];
+                if(s.Piece is King)
+                {
+                    validmoves = getValidMoves(s);
+                    if(validmoves.Count == 0)
+                    {
+                        s.Color = "Purple";
+                    }
 
-        //            if (s.Piece != null && s.Piece.PieceColor == "Black")
-        //            {
-        //                validmoves = getValidMoves(s);
-        //                threats = getThreats(s, "Black");
-        //                if (validmoves.Count == 0 && threats.Count > 0)
-        //                {
-        //                    Game.endGame();
-        //                }
-
-        //            }
-        //        }
-        //    }
-        //}
+                }
+            }
+        }
     }
 
     private bool isThreatened(Square checkSquare, string color)
