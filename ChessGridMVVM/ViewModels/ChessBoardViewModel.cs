@@ -16,6 +16,27 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private readonly string _secondaryColor = "#eeeed2";
     private readonly string _highlightColor = "Red";
     private readonly string _possiblemoveColor = "Cyan";
+    private Square _whiteKing;
+    private Square _blackKing;
+
+
+    public Square WhiteKing
+    {
+        get => _whiteKing;
+        set
+        {
+            _whiteKing = value;
+        }
+    }
+
+    public Square BlackKing
+    {
+        get => _blackKing;
+        set
+        {
+            _blackKing = value;
+        }
+    }
 
     public Game Game
     {
@@ -91,14 +112,14 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         {
             for(int i = 0; i < Size; i++)
             {
-                //if(j == 1)
+                //if (j == 1)
                 //{
-                //    Board[7-j][i].Piece = new Pawn("White");
+                //    Board[7 - j][i].Piece = new Pawn("White");
                 //}
 
                 //if (j == 6)
                 //{
-                //    Board[7-j][i].Piece = new Pawn("Black");
+                //    Board[7 - j][i].Piece = new Pawn("Black");
                 //}
             }
         }
@@ -113,6 +134,8 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         Board[0][3].Piece = new King("Black");
         Board[0][4].Piece = new Rook("Black");
 
+        WhiteKing = Board[5][4];
+        BlackKing = Board[0][3];
 
     }
 
@@ -264,13 +287,25 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             Capture(endSquare.Piece);
         }
 
+        if (startSquare.Piece is King) // update king pos if its a king
+        {
+            if(startSquare.Piece.PieceColor == "White")
+            {
+                WhiteKing = endSquare;
+            }
+            else
+            {
+                BlackKing = endSquare;
+            }
+        }
+
         endSquare.Piece = startSquare.Piece;
         startSquare.Piece = null;
         startSquare.RevertColor();
 
-        checkPromotion(endSquare);
-        checkCheckmate();
-        Game.nextTurn();
+        checkPromotion(endSquare); // checks for pawn promotion
+
+        Game.endTurn();
     }
 
     public void checkPromotion(Square endsquare)
@@ -281,29 +316,28 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
-    public void checkCheckmate()
+    public bool KingHasMoves(string color) // Checks if the king of the color provided has a valid move
     {
-        Square s;
-        List<Square> validmoves;
-        for (int i = 0; i < Size; i++)
+        List<Square> validmoves = null;
+
+        if(color == "White")
         {
-            for (int j = 0; j < Size; j++)
-            {
-                s = Board[7 - j][i];
-                if(s.Piece is King)
-                {
-                    validmoves = getValidMoves(s);
-                    if(validmoves.Count == 0)
-                    {
-                        s.Color = "Purple";
-                    }
-
-                }
-            }
+            validmoves = getValidMoves(WhiteKing);
         }
-    }
+        if (color == "Black")
+        {
+            validmoves = getValidMoves(BlackKing);
+        }
 
-    private bool isThreatened(Square checkSquare, string color)
+        if(validmoves.Count == 0)
+        {
+            return false;
+        }
+        return true;
+    }
+    
+
+    public bool isThreatened(Square checkSquare, string color)
     {
 
         Square s;
@@ -325,6 +359,37 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
 
         return false;
+    }
+
+    public string getCurrentState(string color)
+    {
+        if(KingHasMoves(color) == false) // king has no moves
+        {
+            if (color == "White")
+            {
+                if (isThreatened(WhiteKing, WhiteKing.Piece.PieceColor) == true) // king is in check
+                {
+                    WhiteKing.Color = "Purple";
+                    return "Checkmate";
+                }
+
+            }
+
+            if (color == "Black")
+            {
+                if (isThreatened(WhiteKing, WhiteKing.Piece.PieceColor) == true) // king is in check
+                {
+                    BlackKing.Color = "Purple";
+                    return "Checkmate";
+                }
+
+            }
+            return "Stalemate";
+        }
+
+        return "Valid";
+        
+
     }
 
     private void Capture(Piece p)
