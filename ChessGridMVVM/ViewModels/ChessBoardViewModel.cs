@@ -112,15 +112,15 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         {
             for(int i = 0; i < Size; i++)
             {
-                //if (j == 1)
-                //{
-                //    Board[7 - j][i].Piece = new Pawn("White");
-                //}
+                if (j == 1)
+                {
+                    Board[7 - j][i].Piece = new Pawn("White");
+                }
 
-                //if (j == 6)
-                //{
-                //    Board[7 - j][i].Piece = new Pawn("Black");
-                //}
+                if (j == 6)
+                {
+                    Board[7 - j][i].Piece = new Pawn("Black");
+                }
             }
         }
         Board[0][0].Piece = new Rook("Black");
@@ -184,6 +184,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         {
             return false;
         }
+
         int dx = end.Column - start.Column;
         int dy = end.Row - start.Row;
         int yStep = dy == 0 ? 0 : dy / Math.Abs(dy);
@@ -237,6 +238,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 }
             }
         }
+
         if(selectedSquare.Piece is King && possMoves.Count>0)
         {
             List<Square> templist = new List<Square>();
@@ -335,6 +337,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
         return true;
     }
+
     
 
     public bool isThreatened(Square checkSquare, string color)
@@ -349,7 +352,20 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 if(s.Piece != null && s.Piece.PieceColor != color)
                 {
                     s.Color = "Red";
-                    if (isValidMove(s, checkSquare))
+                    if (s.Piece is Pawn)
+                    {
+                        if (checkSquare.Row == s.Row + 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
+                        {
+                            return true;
+                        }
+
+                        if(checkSquare.Row == s.Row - 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
+                        {
+                            return true;
+                        }
+
+                    }
+                    else if (isValidMove(s, checkSquare))
                     {
                         s.Color = "Blue";
                         return true;
@@ -361,13 +377,35 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         return false;
     }
 
+    private bool kinginCheck(string color)
+    {
+        if (color == "White")
+        {
+            if (isThreatened(WhiteKing, WhiteKing.Piece.PieceColor) == true) // king is in check
+            {
+                return true;
+            }
+        }
+        
+        if (color == "Black")
+        {
+            if (isThreatened(WhiteKing, WhiteKing.Piece.PieceColor) == true) // king is in check
+            {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
     public string getCurrentState(string color)
     {
         if(KingHasMoves(color) == false) // king has no moves
         {
             if (color == "White")
             {
-                if (isThreatened(WhiteKing, WhiteKing.Piece.PieceColor) == true) // king is in check
+                if (kinginCheck(color)) // king is in check
                 {
                     WhiteKing.Color = "Purple";
                     return "Checkmate";
@@ -377,7 +415,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
             if (color == "Black")
             {
-                if (isThreatened(WhiteKing, WhiteKing.Piece.PieceColor) == true) // king is in check
+                if (kinginCheck(color)) // king is in check
                 {
                     BlackKing.Color = "Purple";
                     return "Checkmate";
@@ -389,8 +427,9 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
         return "Valid";
         
-
     }
+
+
 
     private void Capture(Piece p)
     {
