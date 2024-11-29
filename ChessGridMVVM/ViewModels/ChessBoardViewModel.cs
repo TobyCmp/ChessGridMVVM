@@ -354,12 +354,12 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                     s.Color = "Red";
                     if (s.Piece is Pawn)
                     {
-                        if (checkSquare.Row == s.Row + 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
+                        if (s.Piece.PieceColor == "White" && checkSquare.Row == s.Row + 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
                         {
                             return true;
                         }
 
-                        if(checkSquare.Row == s.Row - 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
+                        if(s.Piece.PieceColor == "Black" &&checkSquare.Row == s.Row - 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
                         {
                             return true;
                         }
