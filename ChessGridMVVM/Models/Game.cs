@@ -17,7 +17,6 @@ namespace ChessGridMVVM.Models
         private Player _currentPlayer;
         private Player _opposingPlayer;
 
-        private string path = "C:\\Users\\K31644\\Source\\Repos\\ChessGridMVVM\\ChessGridMVVM\\Models\\gamestates";
 
         private string _gameState;
         public string GameState
@@ -95,7 +94,8 @@ namespace ChessGridMVVM.Models
 
         public void endGame()
         {
-            System.Environment.Exit(1);
+            Entry e = new Entry();
+            e.Show();
         }
     }
 }

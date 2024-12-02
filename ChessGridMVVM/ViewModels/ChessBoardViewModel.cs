@@ -108,21 +108,21 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private void IntializePieces()
     {
         
-        for(int j = 0; j <= Size; j++)
-        {
-            for(int i = 0; i < Size; i++)
-            {
-                if (j == 1)
-                {
-                    Board[7 - j][i].Piece = new Pawn("White");
-                }
+        //for(int j = 0; j <= Size; j++)
+        //{
+        //    for(int i = 0; i < Size; i++)
+        //    {
+        //        if (j == 1)
+        //        {
+        //            Board[7 - j][i].Piece = new Pawn("White");
+        //        }
 
-                if (j == 6)
-                {
-                    Board[7 - j][i].Piece = new Pawn("Black");
-                }
-            }
-        }
+        //        if (j == 6)
+        //        {
+        //            Board[7 - j][i].Piece = new Pawn("Black");
+        //        }
+        //    }
+        //}
         Board[0][0].Piece = new Rook("Black");
         Board[0][7].Piece = new Rook("Black");
         Board[7][0].Piece = new Rook("White");
