@@ -1,8 +1,0 @@
-ChessGridMVVM.Models.King,,,ChessGridMVVM.Models.King,ChessGridMVVM.Models.Rook,,,ChessGridMVVM.Models.Rook
-,,,,ChessGridMVVM.Models.Pawn,ChessGridMVVM.Models.Pawn,ChessGridMVVM.Models.Pawn,ChessGridMVVM.Models.Pawn
-,,,,,,,
-ChessGridMVVM.Models.Pawn,ChessGridMVVM.Models.Pawn,,ChessGridMVVM.Models.Pawn,,,,
-,,,,,ChessGridMVVM.Models.Knight,,
-,,,ChessGridMVVM.Models.Pawn,,,,
-ChessGridMVVM.Models.Pawn,ChessGridMVVM.Models.Pawn,ChessGridMVVM.Models.Pawn,,ChessGridMVVM.Models.Pawn,ChessGridMVVM.Models.Pawn,ChessGridMVVM.Models.Pawn,ChessGridMVVM.Models.Pawn
-ChessGridMVVM.Models.Rook,,ChessGridMVVM.Models.Bishop,ChessGridMVVM.Models.Queen,,,,ChessGridMVVM.Models.Rook
