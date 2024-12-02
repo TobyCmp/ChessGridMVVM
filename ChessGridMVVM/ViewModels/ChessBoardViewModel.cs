@@ -160,6 +160,8 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             {
                 Square s = SelectedSquare;
                 string color = s.Piece.PieceColor;
+                Piece p = Board[7 - row][col].Piece;
+
                 if (SelectedSquare.Piece is King)
                 {
                     if (isThreatened(Board[7 - row][col], color) == false)
@@ -168,6 +170,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                         Move(s.Row, s.Column, row, col);
                     }
                 }
+
                 else
                 {
                     SelectedSquare = null;
@@ -264,7 +267,16 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         List<Square> l = getValidMoves(s);
         foreach (Square square in l)
         {
-            square.SetColour(_possiblemoveColor);
+            if(square.Piece != null)
+            {
+                square.SetColour("Yellow");
+
+            }
+            else
+            {
+                square.SetColour(_possiblemoveColor);
+
+            }
         }
     }
 
@@ -344,6 +356,9 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     {
 
         Square s;
+        Piece p;
+        p = checkSquare.Piece;
+        checkSquare.Piece = null;
         for(int i = 0; i < 8; i++)
         {
             for(int j = 0; j< 8; j++)
@@ -356,24 +371,27 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                     {
                         if (s.Piece.PieceColor == "White" && checkSquare.Row == s.Row + 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
                         {
+                            checkSquare.Piece = p;
                             return true;
                         }
 
                         if(s.Piece.PieceColor == "Black" &&checkSquare.Row == s.Row - 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
                         {
+                            checkSquare.Piece = p;
                             return true;
                         }
 
                     }
                     else if (isValidMove(s, checkSquare))
                     {
+                        checkSquare.Piece = p;
                         s.Color = "Blue";
                         return true;
                     }
                 }
             }
         }
-
+        checkSquare.Piece = p;
         return false;
     }
 

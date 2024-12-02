@@ -60,39 +60,6 @@ namespace ChessGridMVVM.Models
             }
         }
 
-        public void SaveBoardState(string filePath)
-        {
-            using StreamWriter writer = new StreamWriter(filePath);
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    writer.Write(ChessBoardViewModel.Board[i][j].Piece);
-                    if (j < 7) writer.Write(","); // Separate with commas
-                }
-                writer.WriteLine();
-            }
-        }
-
-        //public void LoadBoardState(string filePath)
-        //{
-        //    using (StreamReader reader = new StreamReader(filePath))
-        //    {
-        //        for (int i = 0; i < 8; i++)
-        //        {
-        //            string line = reader.ReadLine();
-        //            if (line != null)
-        //            {
-        //                string[] pieces = line.Split(',');
-        //                for (int j = 0; j < 8; j++)
-        //                {
-        //                    board[i, j] = pieces[j];
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
 
         public Game()
         {
@@ -111,7 +78,6 @@ namespace ChessGridMVVM.Models
             {
                 nextTurn();
             }
-            SaveBoardState(path);
         }
 
         public void updateGameState()

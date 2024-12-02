@@ -14,9 +14,10 @@ namespace ChessGridMVVM.Models
 
         public override int Value => _value = 1;
 
+        public bool enPassant;
         public Pawn(string pieceColor) : base(pieceColor)
         {
-            
+            enPassant = false;
         }
 
         public override bool isValidMove(Square startingSquare, Square endSquare)
