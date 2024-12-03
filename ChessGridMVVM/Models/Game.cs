@@ -89,6 +89,7 @@ namespace ChessGridMVVM.Models
         {
             OpposingPlayer = CurrentPlayer;
             CurrentPlayer = CurrentPlayer == WhitePlayer ? BlackPlayer : WhitePlayer;
+            ChessBoardViewModel.updateKingVariable(CurrentPlayer.Color);
 
         }
 

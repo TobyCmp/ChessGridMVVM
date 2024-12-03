@@ -18,6 +18,15 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private readonly string _possiblemoveColor = "Cyan";
     private Square _whiteKing;
     private Square _blackKing;
+    private bool isCurrentPlayerChecked;
+
+    private bool _isCurrentPlayerChecked;
+
+    public bool IsCurrentPlayerChecked
+    {
+        get { return _isCurrentPlayerChecked; }
+        set { _isCurrentPlayerChecked = value; }
+    }
 
 
     public Square WhiteKing
@@ -86,6 +95,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         Game = game; // accepts game instance
         InitializeBoard();
         IntializePieces();
+        IsCurrentPlayerChecked = false;
     }
 
     private void InitializeBoard()
@@ -197,6 +207,10 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         bool validmove = false;
         validmove = start.Piece.isValidMove(start, end);
 
+        if(IsCurrentPlayerChecked == true)
+        {
+            return false;
+        }
         if(validmove == false)
         {
             return false;
@@ -366,7 +380,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 s = Board[7 - j][i];
                 if(s.Piece != null && s.Piece.PieceColor != color)
                 {
-                    s.Color = "Red";
                     if (s.Piece is Pawn)
                     {
                         if (s.Piece.PieceColor == "White" && checkSquare.Row == s.Row + 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
@@ -395,6 +408,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         return false;
     }
 
+
     private bool kinginCheck(string color)
     {
         if (color == "White")
@@ -407,7 +421,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         
         if (color == "Black")
         {
-            if (isThreatened(WhiteKing, WhiteKing.Piece.PieceColor) == true) // king is in check
+            if (isThreatened(BlackKing, BlackKing.Piece.PieceColor) == true) // king is in check
             {
                 return true;
             }
@@ -415,6 +429,24 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
 
         return false;
+    }
+
+    public void updateKingVariable(string color)
+    {
+        isCurrentPlayerChecked = kinginCheck(color);   
+        if(isCurrentPlayerChecked == true)
+        {
+            if(color == "Black")
+            {
+                BlackKing.Color = "Brown";
+            }
+
+            if(color == "White")
+            {
+                WhiteKing.Color = "Brown";
+            }
+        }
+        
     }
 
     public string getCurrentState(string color)
