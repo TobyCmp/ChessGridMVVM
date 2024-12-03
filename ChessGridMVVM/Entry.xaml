@@ -5,11 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChessGridMVVM"
         mc:Ignorable="d"
-        Title="Entry" Height="450" Width="800">
+        Title="Entry" Height="700" Width="500">
     <Grid>
-        <Button 
-            Click="Game_Click">
+        <Button
+            Click="Game_Click" Margin="154,275,154,342">
             Load Game
         </Button>
+
+        <TextBox Margin="176,143,176,492"
+            TextAlignment="Center"
+            FontSize="15">
+
+            Username
+        </TextBox>
+        <TextBox Margin="176,207,176,423"
+            TextAlignment="Center"
+            FontSize="15">
+
+            Password
+        </TextBox>
     </Grid>
+
 </Window>
