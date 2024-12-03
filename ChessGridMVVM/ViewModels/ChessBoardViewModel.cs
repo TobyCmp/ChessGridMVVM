@@ -18,7 +18,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private readonly string _possiblemoveColor = "Cyan";
     private Square _whiteKing;
     private Square _blackKing;
-    private bool isCurrentPlayerChecked;
 
     private bool _isCurrentPlayerChecked;
 
@@ -198,6 +197,8 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             return false;
         }
 
+
+
         int dx = end.Column - start.Column;
         int dy = end.Row - start.Row;
         int yStep = dy == 0 ? 0 : dy / Math.Abs(dy);
@@ -207,16 +208,14 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         bool validmove = false;
         validmove = start.Piece.isValidMove(start, end);
 
-        if(IsCurrentPlayerChecked == true)
-        {
-            return false;
-        }
         if(validmove == false)
         {
             return false;
         }
 
-        if(start.Piece.Name == "Knight")
+
+
+        if (start.Piece.Name == "Knight")
         {
             return validmove;
         }
@@ -237,7 +236,30 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             currentColumn = currentColumn + xStep;
         }
 
+        //if (IsCurrentPlayerChecked == true && start.Piece is not King)
+        //{
+        //    if (blocksCheck(start, end) != true)
+        //    {
+        //        return false;
+        //    }
+        //}
+
         return validmove;
+    }
+
+    private bool blocksCheck(Square start, Square end)
+    {
+        Piece p = end.Piece;
+        Board[7 - end.Row][end.Column].Piece = start.Piece;
+        if(kinginCheck(start.Color) == true)
+        {
+            Board[7 - end.Row][end.Column].Piece = p;
+            return true;
+        }
+        Board[7 - end.Row][end.Column].Piece = p;
+
+        return false;
+        
     }
 
 
@@ -433,8 +455,8 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     public void updateKingVariable(string color)
     {
-        isCurrentPlayerChecked = kinginCheck(color);   
-        if(isCurrentPlayerChecked == true)
+        IsCurrentPlayerChecked = kinginCheck(color);   
+        if(IsCurrentPlayerChecked == true)
         {
             if(color == "Black")
             {
