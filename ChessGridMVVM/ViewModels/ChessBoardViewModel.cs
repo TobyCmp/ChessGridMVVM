@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System;
 using System.Windows;
+using System.Collections;
 
 public class ChessBoardViewModel : INotifyPropertyChanged
 {
@@ -237,6 +238,19 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             currentColumn = currentColumn + xStep;
         }
 
+        if (IsCurrentPlayerChecked)
+        {
+            if(start.Piece is not King)
+            {
+                List<Square> blockSquares = blockingSquares();
+                if (blockSquares.Contains(end))
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
         return validmove;
     }
 
@@ -400,7 +414,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                     else if (isValidMove(s, checkSquare))
                     {
                         checkSquare.Piece = p;
-                        s.Color = "Blue";
                         return true;
                     }
                 }
@@ -458,7 +471,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             if (isThreatened(WhiteKing, WhiteKing.Piece.PieceColor) == true) // king is in check
             {
                 threat = findThreatPiece(WhiteKing, WhiteKing.Piece.PieceColor);
-                threat.Color = "Pink";
+                blockingSquares();
                 return true;
             }
         }
@@ -468,7 +481,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             if (isThreatened(BlackKing, BlackKing.Piece.PieceColor) == true) // king is in check
             {
                 threat = findThreatPiece(BlackKing, BlackKing.Piece.PieceColor);
-                threat.Color = "Pink";
+                blockingSquares();
                 return true;
             }
 
@@ -478,6 +491,44 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         return false;
     }
 
+    private List<Square> blockingSquares()
+    {
+        List<Square> blockSquares = new List<Square>();
+        Square start = null;
+        Square end = null;
+
+        if (Game.CurrentPlayer.Color == "White")
+        {
+            end = WhiteKing;
+        }
+        else if (Game.CurrentPlayer.Color == "Black")
+        {
+            end = BlackKing;
+        }
+
+        start = threat;
+        blockSquares.Add(threat);
+
+        int dx = end.Column - start.Column;
+        int dy = end.Row - start.Row;
+        int yStep = dy == 0 ? 0 : dy / Math.Abs(dy);
+        int xStep = dx == 0 ? 0 : dx / Math.Abs(dx);
+        int currentRow = start.Row + yStep;
+        int currentColumn = start.Column + xStep;
+
+        while (currentRow != end.Row || currentColumn != end.Column) // Check if there exists a piece in any square between start and end 
+        {
+            blockSquares.Add(Board[7 - currentRow][currentColumn]);
+            currentRow = currentRow + yStep;
+            currentColumn = currentColumn + xStep;
+        }
+
+        foreach(Square s in blockSquares)
+        {
+            s.Color = "Green";
+        }
+        return blockSquares;
+    }
     public void updateKingVariable(string color)
     {
         IsCurrentPlayerChecked = kinginCheck(color);   
