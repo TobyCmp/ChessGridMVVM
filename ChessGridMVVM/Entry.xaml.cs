@@ -20,6 +20,9 @@ namespace ChessGridMVVM
     /// </summary>
     public partial class Entry : Window
     {
+        private string username = "";
+        private string password = "";
+
         public Entry()
         {
             InitializeComponent();
@@ -31,6 +34,19 @@ namespace ChessGridMVVM
             m.Show();
             Hide();
             
+        }
+
+        private void Login_Click(object sender, RoutedEventArgs e)
+        {
+            username = Username.Text;
+            password = Password.Text;
+
+        }
+
+        private void Register_Click(object sender, RoutedEventArgs e)
+        {
+            username = Username.Text;
+            password = Password.Text;
         }
 
     }

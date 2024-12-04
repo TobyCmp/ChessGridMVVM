@@ -7,23 +7,32 @@
         mc:Ignorable="d"
         Title="Entry" Height="700" Width="500">
     <Grid>
+        <TextBlock
+            HorizontalAlignment="Center"
+            FontSize="50" Margin="0,35,0,-35">
+            Chess
+        </TextBlock>
+        <TextBlock
+            HorizontalAlignment="Center"
+            FontSize="15" Margin="0,98,0,-99">
+            By Toby Chick
+        </TextBlock>
         <Button
-            Click="Game_Click" Margin="154,275,154,342">
-            Load Game
-        </Button>
+            Click="Game_Click" Margin="154,397,154,220" Content="Load Game"/>
+        <Button
+            Click="Register_Click" Margin="176,279,176,363" Content="Register"/>
+        <Button
+            Click="Login_Click" Margin="176,330,176,312" Content="Login"/>
 
         <TextBox Margin="176,143,176,492"
             TextAlignment="Center"
-            FontSize="15">
-
-            Username
-        </TextBox>
+            Name="Username"
+            FontSize="15" Text="Username"/>
         <TextBox Margin="176,207,176,423"
             TextAlignment="Center"
-            FontSize="15">
+            Name="Password"
+            FontSize="15" Text="Password"/>
 
-            Password
-        </TextBox>
     </Grid>
 
 </Window>
