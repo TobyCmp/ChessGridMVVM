@@ -26,7 +26,27 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     public bool IsCurrentPlayerChecked
     {
         get { return _isCurrentPlayerChecked; }
-        set { _isCurrentPlayerChecked = value; }
+        set 
+        {
+            _isCurrentPlayerChecked = value;
+            if (_isCurrentPlayerChecked == true)
+            {
+                if (Game.CurrentPlayer.Color == "Black")
+                {
+                    BlackKing.Color = "Brown";
+                }
+
+                if (Game.CurrentPlayer.Color == "White")
+                {
+                    WhiteKing.Color = "Brown";
+                }
+            }
+            else
+            {
+                WhiteKing.RevertColor();
+                BlackKing.RevertColor();
+            }
+        }
     }
 
 
@@ -471,7 +491,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             if (isThreatened(WhiteKing, WhiteKing.Piece.PieceColor) == true) // king is in check
             {
                 threat = findThreatPiece(WhiteKing, WhiteKing.Piece.PieceColor);
-                blockingSquares();
                 return true;
             }
         }
@@ -481,7 +500,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             if (isThreatened(BlackKing, BlackKing.Piece.PieceColor) == true) // king is in check
             {
                 threat = findThreatPiece(BlackKing, BlackKing.Piece.PieceColor);
-                blockingSquares();
                 return true;
             }
 
@@ -516,7 +534,12 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         int currentRow = start.Row + yStep;
         int currentColumn = start.Column + xStep;
 
-        while (currentRow != end.Row || currentColumn != end.Column) // Check if there exists a piece in any square between start and end 
+        if (Math.Abs(dx) != Math.Abs(dy) && dx != 0 && dy != 0) // Check that move is either straight or diagonal 
+        {
+            return blockSquares;
+        }
+
+        while (currentRow != end.Row || currentColumn != end.Column && start.Piece.Name != "King") // Check if there exists a piece in any square between start and end 
         {
             blockSquares.Add(Board[7 - currentRow][currentColumn]);
             currentRow = currentRow + yStep;
@@ -532,19 +555,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     public void updateKingVariable(string color)
     {
         IsCurrentPlayerChecked = kinginCheck(color);   
-        if(IsCurrentPlayerChecked == true)
-        {
-            if(color == "Black")
-            {
-                BlackKing.Color = "Brown";
-            }
-
-            if(color == "White")
-            {
-                WhiteKing.Color = "Brown";
-            }
-        }
-        
     }
 
     public string getCurrentState(string color)
