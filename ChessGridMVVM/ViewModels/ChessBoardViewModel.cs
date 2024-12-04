@@ -18,6 +18,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private readonly string _possiblemoveColor = "Cyan";
     private Square _whiteKing;
     private Square _blackKing;
+    private Square threat;
 
     private bool _isCurrentPlayerChecked;
 
@@ -218,7 +219,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         if (start.Piece.Name == "Knight")
         {
             return validmove;
-        }
+        }   
 
         if (Math.Abs(dx) != Math.Abs(dy) && dx != 0 && dy != 0) // Check that move is either straight or diagonal 
         {
@@ -236,31 +237,10 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             currentColumn = currentColumn + xStep;
         }
 
-        //if (IsCurrentPlayerChecked == true && start.Piece is not King)
-        //{
-        //    if (blocksCheck(start, end) != true)
-        //    {
-        //        return false;
-        //    }
-        //}
-
         return validmove;
     }
 
-    private bool blocksCheck(Square start, Square end)
-    {
-        Piece p = end.Piece;
-        Board[7 - end.Row][end.Column].Piece = start.Piece;
-        if(kinginCheck(start.Color) == true)
-        {
-            Board[7 - end.Row][end.Column].Piece = p;
-            return true;
-        }
-        Board[7 - end.Row][end.Column].Piece = p;
 
-        return false;
-        
-    }
 
 
     // Highlight selected cell and highlight all valid moves from that cell
@@ -430,6 +410,46 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         return false;
     }
 
+    public Square findThreatPiece(Square checkSquare, string color)
+    {
+
+        Square s;
+        Piece p;
+        p = checkSquare.Piece;
+        checkSquare.Piece = null;
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                s = Board[7 - j][i];
+                if (s.Piece != null && s.Piece.PieceColor != color)
+                {
+                    if (s.Piece is Pawn)
+                    {
+                        if (s.Piece.PieceColor == "White" && checkSquare.Row == s.Row + 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
+                        {
+                            checkSquare.Piece = p;
+                            return s;
+                        }
+
+                        if (s.Piece.PieceColor == "Black" && checkSquare.Row == s.Row - 1 && (checkSquare.Column == s.Column + 1 || checkSquare.Column == s.Column - 1))
+                        {
+                            checkSquare.Piece = p;
+                            return s;
+                        }
+
+                    }
+                    else if (isValidMove(s, checkSquare))
+                    {
+                        checkSquare.Piece = p;
+                        return s;
+                    }
+                }
+            }
+        }
+        checkSquare.Piece = p;
+        return null;
+    }
 
     private bool kinginCheck(string color)
     {
@@ -437,6 +457,8 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         {
             if (isThreatened(WhiteKing, WhiteKing.Piece.PieceColor) == true) // king is in check
             {
+                threat = findThreatPiece(WhiteKing, WhiteKing.Piece.PieceColor);
+                threat.Color = "Pink";
                 return true;
             }
         }
@@ -445,11 +467,14 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         {
             if (isThreatened(BlackKing, BlackKing.Piece.PieceColor) == true) // king is in check
             {
+                threat = findThreatPiece(BlackKing, BlackKing.Piece.PieceColor);
+                threat.Color = "Pink";
                 return true;
             }
 
         }
 
+        threat = null;
         return false;
     }
 
