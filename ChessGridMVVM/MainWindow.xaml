@@ -8,6 +8,7 @@
         <converters:InverseColorConverter x:Key="InverseColorConverter"/>
     </Window.Resources>
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -49,5 +50,10 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+
+        <Button RenderTransformOrigin="0.5,0.5" Margin="10,199,684,543" Click="Button_Click">
+            Undo
+        </Button>
     </Grid>
+
 </Window>

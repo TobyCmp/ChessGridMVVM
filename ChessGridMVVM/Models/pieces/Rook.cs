@@ -14,6 +14,7 @@ namespace ChessGridMVVM.Models
 
         public override int Value => _value = 5;
 
+        public bool validCastle = true;
 
         public Rook(string pieceColor) : base(pieceColor)
         {

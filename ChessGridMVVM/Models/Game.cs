@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace ChessGridMVVM.Models
         private Player _currentPlayer;
         private Player _opposingPlayer;
 
+        private Stack<ObservableCollection<ObservableCollection<Square>>> gameMoves;
 
         private string _gameState;
         public string GameState
@@ -68,6 +70,8 @@ namespace ChessGridMVVM.Models
             CurrentPlayer = WhitePlayer;
             OpposingPlayer = BlackPlayer;
             GameState = "Valid";
+            gameMoves = new Stack<ObservableCollection<ObservableCollection<Square>>>();
+            addSnapshot();
         }
 
         public void endTurn()
@@ -79,10 +83,21 @@ namespace ChessGridMVVM.Models
             }
         }
 
+        private void addSnapshot()
+        {
+            gameMoves.Push(ChessBoardViewModel.Board);
+        }
+
         public void updateGameState()
         {
             string currentState = ChessBoardViewModel.getCurrentState(OpposingPlayer.Color);
             GameState = currentState;
+        }
+
+        public void undoTurn()
+        {
+            var b = gameMoves.Pop();
+            ChessBoardViewModel.Board = b;
         }
 
         public void nextTurn()
@@ -90,7 +105,7 @@ namespace ChessGridMVVM.Models
             OpposingPlayer = CurrentPlayer;
             CurrentPlayer = CurrentPlayer == WhitePlayer ? BlackPlayer : WhitePlayer;
             ChessBoardViewModel.updateKingVariable(CurrentPlayer.Color);
-
+            addSnapshot();
         }
 
         public void endGame()

@@ -364,6 +364,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
         if (startSquare.Piece is King) // update king pos if its a king
         {
+            startSquare.Piece.ValidCastle = false;
             if(startSquare.Piece.PieceColor == "White")
             {
                 WhiteKing = endSquare;
@@ -372,6 +373,11 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             {
                 BlackKing = endSquare;
             }
+        }
+
+        if(startSquare.Piece is Rook)
+        {
+            startSquare.Piece.ValidCastle = false;
         }
 
         endSquare.Piece = startSquare.Piece;

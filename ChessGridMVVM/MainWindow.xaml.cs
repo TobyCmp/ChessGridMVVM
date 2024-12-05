@@ -8,7 +8,7 @@ namespace ChessGridMVVM
     public partial class MainWindow : Window
     {
         private ChessBoardViewModel ViewModel => DataContext as ChessBoardViewModel;
-
+        Game game;
         public MainWindow(bool showValidMoves)
         {
 
@@ -16,7 +16,7 @@ namespace ChessGridMVVM
             //DataContext = new ChessBoardViewModel();
 
             InitializeComponent();
-            var game = new Game(showValidMoves); // create an instance of the game
+            game = new Game(showValidMoves); // create an instance of the game
             DataContext = game.ChessBoardViewModel;
         }
 
@@ -28,6 +28,11 @@ namespace ChessGridMVVM
             {
                 ViewModel.SelectSquare(dataContext.Row, dataContext.Column);
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            game.undoTurn();
         }
     }
 }

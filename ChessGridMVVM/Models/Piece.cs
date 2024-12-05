@@ -15,6 +15,7 @@ namespace ChessGridMVVM.Models
         protected string _pieceSymbol;
         private string _pieceColor;
         public abstract string Name { get; }
+        private bool _validCastle;
 
         public string PieceColor
         {
@@ -22,7 +23,11 @@ namespace ChessGridMVVM.Models
             set { _pieceColor = value; }
         }
 
-
+        public bool ValidCastle
+        {
+            get { return _validCastle; }
+            set { _validCastle = value; }
+        }
 
         public Piece(string pieceColor)
         {

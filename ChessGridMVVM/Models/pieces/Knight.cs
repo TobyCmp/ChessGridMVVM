@@ -14,7 +14,6 @@ namespace ChessGridMVVM.Models
 
         public override int Value => _value = 5;
 
-
         public Knight(string pieceColor) : base(pieceColor)
         {
             
