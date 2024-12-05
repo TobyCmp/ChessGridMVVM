@@ -9,14 +9,14 @@ namespace ChessGridMVVM
     {
         private ChessBoardViewModel ViewModel => DataContext as ChessBoardViewModel;
 
-        public MainWindow()
+        public MainWindow(bool showValidMoves)
         {
 
             //InitializeComponent();
             //DataContext = new ChessBoardViewModel();
 
             InitializeComponent();
-            var game = new Game(); // create an instance of the game
+            var game = new Game(showValidMoves); // create an instance of the game
             DataContext = game.ChessBoardViewModel;
         }
 

@@ -22,7 +22,7 @@ namespace ChessGridMVVM
     {
         private string username = "";
         private string password = "";
-
+        private bool showValidMoves = false;
         public Entry()
         {
             InitializeComponent();
@@ -30,7 +30,7 @@ namespace ChessGridMVVM
 
         private void Game_Click(object sender, EventArgs e)
         {
-            MainWindow m = new MainWindow();
+            MainWindow m = new MainWindow(showValidMoves);
             m.Show();
             Hide();
             
@@ -49,5 +49,13 @@ namespace ChessGridMVVM
             password = Password.Text;
         }
 
+        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            showValidMoves = true;
+        }
+        private void ToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            showValidMoves = false;
+        }
     }
 }

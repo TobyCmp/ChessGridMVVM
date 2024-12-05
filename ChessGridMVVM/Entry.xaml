@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChessGridMVVM"
         mc:Ignorable="d"
-        Title="Entry" Height="700" Width="500">
+        Title
+        ="Entry" Height="700" Width="500">
     <Grid>
+        <ToggleButton Margin="10,525,362,107" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked">
+            ShowValidMoves
+        </ToggleButton>
         <TextBlock
             HorizontalAlignment="Center"
             FontSize="50" Margin="0,35,0,-35">

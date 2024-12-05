@@ -20,6 +20,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private Square _whiteKing;
     private Square _blackKing;
     private Square threat;
+    private bool _showValidMoves;
 
     private bool _isCurrentPlayerChecked;
 
@@ -97,26 +98,36 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         get => _selectedSquare;
         set
         { 
-            if (_selectedSquare != null)
+            if(_showValidMoves == true)
             {
-                removeValidMoves(_selectedSquare);
+                if (_selectedSquare != null)
+                {
+                    removeValidMoves(_selectedSquare);
+                }
+                if (value != null)
+                {
+                    _selectedSquare = value;
+                    drawValidMoves(_selectedSquare);
+                }
+                _selectedSquare = value;
+                OnPropertyChanged();
             }
             if (value != null )
             {
                 _selectedSquare = value;
-                drawValidMoves(_selectedSquare);
             }
             _selectedSquare = value;
             OnPropertyChanged();
         }
     }
 
-    public ChessBoardViewModel(Game game)
+    public ChessBoardViewModel(Game game, bool showValidMoves)
     {
         Game = game; // accepts game instance
         InitializeBoard();
         IntializePieces();
         IsCurrentPlayerChecked = false;
+        _showValidMoves = showValidMoves;
     }
 
     private void InitializeBoard()
@@ -138,22 +149,22 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     private void IntializePieces()
     {
-        
-        //for(int j = 0; j <= Size; j++)
-        //{
-        //    for(int i = 0; i < Size; i++)
-        //    {
-        //        if (j == 1)
-        //        {
-        //            Board[7 - j][i].Piece = new Pawn("White");
-        //        }
 
-        //        if (j == 6)
-        //        {
-        //            Board[7 - j][i].Piece = new Pawn("Black");
-        //        }
-        //    }
-        //}
+        for (int j = 0; j <= Size; j++)
+        {
+            for (int i = 0; i < Size; i++)
+            {
+                if (j == 1)
+                {
+                    Board[7 - j][i].Piece = new Pawn("White");
+                }
+
+                if (j == 6)
+                {
+                    Board[7 - j][i].Piece = new Pawn("Black");
+                }
+            }
+        }
         Board[0][0].Piece = new Rook("Black");
         Board[0][7].Piece = new Rook("Black");
         Board[7][0].Piece = new Rook("White");
