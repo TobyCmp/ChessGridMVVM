@@ -83,6 +83,7 @@ namespace ChessGridMVVM.Models
             }
         }
 
+        // Stores current board file in a stack. Used for undo-move.
         private void addSnapshot()
         {
             gameMoves.Push(ChessBoardViewModel.Board);

@@ -11,20 +11,20 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 {
     private Game _game;
     private const int Size = 8;  // Size of the chessboard
-    private ObservableCollection<ObservableCollection<Square>> _board;
+    private ObservableCollection<ObservableCollection<Square>> _board; // array of rows, with an array of columns foreach
     private Square _selectedSquare;  // Track the selected square
     private readonly string _primaryColor = "#769656";
     private readonly string _secondaryColor = "#eeeed2";
     private readonly string _highlightColor = "Red";
     private readonly string _possiblemoveColor = "Cyan";
-    private Square _whiteKing;
-    private Square _blackKing;
-    private Square threat;
-    private bool _showValidMoves;
+    private Square _whiteKing; // Square containing white king
+    private Square _blackKing; // Square containing black king
+    private Square threat; // Find piece that is causing check aka 'threatening' the king
+    private bool _showValidMoves; // Toggleable button to display valid moves with highlighted squares
 
     private bool _isCurrentPlayerChecked;
 
-    public bool IsCurrentPlayerChecked
+    public bool IsCurrentPlayerChecked // Shows if current player is checked - used for move validation
     {
         get { return _isCurrentPlayerChecked; }
         set 
@@ -93,7 +93,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
-    public Square SelectedSquare
+    public Square SelectedSquare // Selecting square handling, highlights possible moves if squares if _showValidMoves is true
     {
         get => _selectedSquare;
         set
@@ -124,13 +124,13 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     public ChessBoardViewModel(Game game, bool showValidMoves)
     {
         Game = game; // accepts game instance
-        InitializeBoard();
-        IntializePieces();
+        InitializeBoard(); // creates board
+        IntializePieces(); // adds pieces to board
         IsCurrentPlayerChecked = false;
         _showValidMoves = showValidMoves;
     }
 
-    private void InitializeBoard()
+    private void InitializeBoard() // Sets up the chessboard as an 8x8 grid, alternating colors for squares.
     {
         Board = new ObservableCollection<ObservableCollection<Square>>();
 
@@ -147,7 +147,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
-    private void IntializePieces()
+    private void IntializePieces() //  Places the pieces on the board in their predefined positions
     {
 
         for (int j = 0; j <= Size; j++)
@@ -181,8 +181,8 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     }
 
-    // Select a square
-    public void SelectSquare(int row, int col)
+    // Handles the selection of a square and manages the logic for selecting pieces and moving them.
+    public void SelectSquare(int row, int col) 
     {
         if (row >= 0 && row < Size && col >= 0 && col < Size)
         {
@@ -222,7 +222,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
-    // Check if move from one cell to another is valid
+    // Determines if a move from one square to another is valid according to chess rules.
     public bool isValidMove(Square start, Square end)
     {
         if (start.Piece == null)
@@ -246,7 +246,17 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             return false;
         }
 
-
+        if (IsCurrentPlayerChecked)
+        {
+            if (start.Piece is not King)
+            {
+                List<Square> blockSquares = blockingSquares();
+                if (blockSquares.Contains(end)!= true)
+                {
+                    return false;
+                }
+            }
+        }
 
         if (start.Piece.Name == "Knight")
         {
@@ -269,18 +279,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             currentColumn = currentColumn + xStep;
         }
 
-        if (IsCurrentPlayerChecked)
-        {
-            if(start.Piece is not King)
-            {
-                List<Square> blockSquares = blockingSquares();
-                if (blockSquares.Contains(end))
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
+
 
         return validmove;
     }
@@ -288,7 +287,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
 
 
-    // Highlight selected cell and highlight all valid moves from that cell
+    //  Returns a list of valid moves for a selected piece.
     public List<Square> getValidMoves(Square selectedSquare) 
     {
         List<Square> possMoves = new List<Square>();
@@ -323,6 +322,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         return possMoves;
     }
 
+    // Highlight valid moves on the board visually.
     public void drawValidMoves(Square s)
     {
         List<Square> l = getValidMoves(s);
@@ -351,7 +351,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
-    // Move piece from one cell to another
+    // Executes the movement of a piece on the board and handles capturing pieces and promotions.
     private void Move(int startRow, int startCol, int endRow, int endCol)
     {
         var startSquare = Board[7- startRow][startCol];
@@ -389,6 +389,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         Game.endTurn();
     }
 
+    // Checks if a pawn has reached the opposite end of the board for promotion.
     public void checkPromotion(Square endsquare)
     {
         if(endsquare.Row == 7 && endsquare.Piece.Name == "Pawn" || endsquare.Row == 0 && endsquare.Piece.Name == "Pawn")
@@ -397,6 +398,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
+    // Checks if the king of the current player has any valid moves.
     public bool KingHasMoves(string color) // Checks if the king of the color provided has a valid move
     {
         List<Square> validmoves = null;
@@ -417,8 +419,8 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         return true;
     }
 
-    
 
+    // Checks if a square is under threat from an opponent's piece. Used to prevent king moving into check.
     public bool isThreatened(Square checkSquare, string color)
     {
 
@@ -460,6 +462,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         return false;
     }
 
+    // Finds the piece causing the check on king, aka 'threatening' the king.
     public Square findThreatPiece(Square checkSquare, string color)
     {
 
@@ -501,6 +504,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         return null;
     }
 
+    // Check if king is in check
     private bool kinginCheck(string color)
     {
         if (color == "White")
@@ -526,6 +530,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         return false;
     }
 
+    // Checks if any squares can move into the line of check, thus blocking the check. Hence 'BlockingSquares'.
     private List<Square> blockingSquares()
     {
         List<Square> blockSquares = new List<Square>();
@@ -569,11 +574,14 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
         return blockSquares;
     }
+
+    // Update check for new player. Ran at end of each turn.
     public void updateKingVariable(string color)
     {
         IsCurrentPlayerChecked = kinginCheck(color);   
     }
 
+    // Checks if game is ended or can continue. Ran at end of each move.
     public string getCurrentState(string color)
     {
         if(KingHasMoves(color) == false) // king has no moves
@@ -605,7 +613,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     }
 
 
-
+    // Stores captured piece in captured list
     private void Capture(Piece p)
     {
 
