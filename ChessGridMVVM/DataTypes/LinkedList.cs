@@ -6,37 +6,52 @@ using System.Threading.Tasks;
 
 namespace ChessGridMVVM.DataTypes
 {
-    public class LL
+    public class DoublyLinkedList<T>
     {
-        private int _count;
+        public int count { get; private set; }
+        private Node<T> head { get; set; }
+        private Node<T> tail { get; set; }
 
-        public int Count
+
+        public DoublyLinkedList(T data)
         {
-            get { return CountNodes; }
-        }
-
-        public LL()
-        {
-
-        }
-
-        public void AddFirst()
-        {
-
-        }
-
-        public void AddLast()
-        {
-
-        }
-
-        public int CountNodes()
-        {
-            int count = 0;
-            return count;
+            head = new Node<T>(data);
+            tail = head;
+            count = 1;
         }
 
 
+        public void AddFirst(T data)
+        {
+            var newNode = new Node<T>(data);
+            head.Next = newNode;
+            newNode.Previous = head;
+            head = newNode;
+            count++;
+        }
+
+        public void AddLast(T data)
+        {
+            var newNode = new Node<T>(data);
+            tail.Previous = newNode;
+            newNode.Next = tail;
+            tail = newNode;
+            count++;
+        }
+
+        public Node<T> RemoveLast()
+        {
+            var temp = tail;
+            tail = tail.Next;
+            return temp;
+        }
+
+        public Node<T> RemoveFirst()
+        {
+            var temp = head;
+            head = head.Previous;
+            return temp;
+        }
 
     }
 }

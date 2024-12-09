@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace ChessGridMVVM.DataTypes
 {
-    internal class Node
+    public class Node<T>
     {
+        public Node(T data) => Data = data;
+        public T Data { get; }
+
+        public Node<T> Next { get; set; }
+
+        public Node<T> Previous { get; set; }
     }
 }
