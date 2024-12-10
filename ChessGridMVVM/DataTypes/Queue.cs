@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChessGridMVVM.DataTypes
 {
-    internal class Queue
+    public class Queue<T>
     {
+        private DoublyLinkedList<T> LL;
+
     }
 }
