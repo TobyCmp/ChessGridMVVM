@@ -23,7 +23,7 @@ namespace ChessGridMVVM.Models
 
         public override bool isValidMove(Square startSquare, Square endSquare)
         {
-            
+            bool valid = false;
             var startRow = startSquare.Row;
             var startCol = startSquare.Column;
             var endRow = endSquare.Row;
@@ -31,15 +31,29 @@ namespace ChessGridMVVM.Models
             int dx = endCol - startCol;
             int dy = endRow - startRow;
 
-            if (endRow < 0 || endRow > 7 || endCol < 0 || endCol > 7 || startSquare == endSquare || endSquare.Piece != null && startSquare.Piece.PieceColor == endSquare.Piece.PieceColor)
-                return false;
-
             if(Math.Abs(dx) < 2 && Math.Abs(dy) < 2)
             {
-                return true;
+                valid = true;
             }
 
-            return false;
+            if (endRow < 0 || endRow > 7 || endCol < 0 || endCol > 7 || startSquare == endSquare || endSquare.Piece != null && startSquare.Piece.PieceColor == endSquare.Piece.PieceColor && endSquare.Piece is not Rook)
+            {
+                valid = false;
+            }
+
+            if (validCastle == true && endSquare.Piece.PieceColor == startSquare.Piece.PieceColor)
+            {
+                if(endSquare.Piece is Rook)
+                {
+                    if(endSquare.Piece.ValidCastle == true)
+                    {
+                        valid = true;
+                    }
+                }
+            }
+
+
+            return valid;
         }
         }
     }
