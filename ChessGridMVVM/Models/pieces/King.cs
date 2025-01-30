@@ -41,16 +41,16 @@ namespace ChessGridMVVM.Models
                 valid = false;
             }
 
-            if (validCastle == true && endSquare.Piece.PieceColor == startSquare.Piece.PieceColor)
-            {
-                if(endSquare.Piece is Rook)
-                {
-                    if(endSquare.Piece.ValidCastle == true)
-                    {
-                        valid = true;
-                    }
-                }
-            }
+            //if (validCastle == true && endSquare.Piece.PieceColor == startSquare.Piece.PieceColor)
+            //{
+            //    if(endSquare.Piece is Rook)
+            //    {
+            //        if(endSquare.Piece.ValidCastle == true)
+            //        {
+            //            valid = true;
+            //        }
+            //    }
+            //}
 
 
             return valid;
