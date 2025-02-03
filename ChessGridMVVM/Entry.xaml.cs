@@ -23,9 +23,13 @@ namespace ChessGridMVVM
         private string username = "";
         private string password = "";
         private bool showValidMoves = false;
+        private EntryViewModel viewModel;
         public Entry()
         {
             InitializeComponent();
+            viewModel = new EntryViewModel();
+            DataContext = viewModel;
+            
         }
 
         private void Game_Click(object sender, EventArgs e)

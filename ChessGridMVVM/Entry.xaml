@@ -36,7 +36,10 @@
             TextAlignment="Center"
             Name="Password"
             FontSize="15" Text="Password"/>
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Width="300" Margin="176,492,0,0">
+            <DataGrid x:Name="UserGrid" ItemsSource="{Binding Users}" AutoGenerateColumns="True" Margin="10" Height="150"/>
 
+        </StackPanel>
     </Grid>
 
 </Window>

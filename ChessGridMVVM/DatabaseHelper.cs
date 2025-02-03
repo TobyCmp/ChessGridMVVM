@@ -27,13 +27,13 @@ namespace ChessGridMVVM
             return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlayerDB.db");
         }
 
-        public List<User> GetStudents()
+        public List<User> GetUsers()
         {
             List<User> users = new List<User>();
             using (var conn = new SQLiteConnection(connectionString))
             {
                 conn.Open();
-                string query = "SELECT * FROM student";
+                string query = "SELECT * FROM Players";
                 using (var cmd = new SQLiteCommand(query, conn))
                 using (var reader = cmd.ExecuteReader())
                 {
