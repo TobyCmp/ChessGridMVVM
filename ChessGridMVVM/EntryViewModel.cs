@@ -16,7 +16,7 @@ namespace ChessGridMVVM
         public EntryViewModel()
         {
             _databaseHelper = new DatabaseHelper();
-            Users = new ObservableCollection<User>(_databaseHelper.GetUsers());
+            // Users = new ObservableCollection<User>(_databaseHelper.GetUsers());
         }
     } 
 }
