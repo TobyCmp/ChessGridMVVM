@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ChessGridMVVM
 {
-    public class EntryViewModel : INotifyPropertyChanged
+    public class EntryViewModel
     {
         private DatabaseHelper _databaseHelper;
 
