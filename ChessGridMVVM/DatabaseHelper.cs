@@ -27,9 +27,9 @@ namespace ChessGridMVVM
             return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "PlayerDB.db");
         }
 
-        public List<User> GetUsers()
+        public List<User> GetPlayers()
         {
-            List<User> users = new List<User>();
+            List<User> players = new List<User>();
             using (var conn = new SQLiteConnection(connectionString))
             {
                 conn.Open();
@@ -39,11 +39,28 @@ namespace ChessGridMVVM
                 {
                     while (reader.Read())
                     {
-                        users.Add(new User(reader.GetInt32(0), reader.GetString(1)));
+                        players.Add(new User(reader.GetInt32(0), reader.GetString(1)));
                     }
                 }
             }
-            return users;
+            return players;
+        }
+
+        public void AddPlayer(string _username, string _password)
+        {
+            using (var conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                string insertQuery = "INSERT INTO Players (Username,Password) VALUES (@_username,@_password)";
+                using (var cmd = new SQLiteCommand(insertQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@_username", _username);
+                    cmd.Parameters.AddWithValue("@_password", _password);
+
+                    cmd.ExecuteNonQuery();
+                }
+
+            }
         }
     }
 }

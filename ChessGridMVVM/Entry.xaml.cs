@@ -44,6 +44,7 @@ namespace ChessGridMVVM
         {
             username = Username.Text;
             password = Password.Text;
+            viewModel.addPlayer(username, password);
 
         }
 
@@ -61,5 +62,6 @@ namespace ChessGridMVVM
         {
             showValidMoves = false;
         }
+
     }
 }

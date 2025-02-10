@@ -1,22 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ChessGridMVVM
 {
-    public class EntryViewModel
+    public class EntryViewModel : INotifyPropertyChanged
     {
         private DatabaseHelper _databaseHelper;
 
-        public ObservableCollection<User> Users { get; set; }
+        public ObservableCollection<User> Players { get; set; }
 
         public EntryViewModel()
         {
             _databaseHelper = new DatabaseHelper();
-            // Users = new ObservableCollection<User>(_databaseHelper.GetUsers());
+            Players = new ObservableCollection<User>(_databaseHelper.GetPlayers());
+        }
+
+        public void addPlayer(string name, string password)
+        {
+            _databaseHelper.AddPlayer(name, password);
         }
     } 
 }

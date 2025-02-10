@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ChessGridMVVM.Models
 {
-    public class Game
+    public class Game : INotifyPropertyChanged
     {
         public ChessBoardViewModel ChessBoardViewModel { get; set; }
         public Player WhitePlayer { get; set; }
@@ -18,7 +20,7 @@ namespace ChessGridMVVM.Models
         private Player _currentPlayer;
         private Player _opposingPlayer;
 
-        private Stack<ObservableCollection<ObservableCollection<Square>>> gameMoves;
+        private Stack<ChessBoardViewModel> gameMoves;
 
         private string _gameState;
         public string GameState
@@ -70,8 +72,7 @@ namespace ChessGridMVVM.Models
             CurrentPlayer = WhitePlayer;
             OpposingPlayer = BlackPlayer;
             GameState = "Valid";
-            gameMoves = new Stack<ObservableCollection<ObservableCollection<Square>>>();
-            addSnapshot();
+            gameMoves = new Stack<ChessBoardViewModel>();
         }
 
         public void endTurn()
@@ -86,7 +87,7 @@ namespace ChessGridMVVM.Models
         // Stores current board file in a stack. Used for undo-move.
         private void addSnapshot()
         {
-            gameMoves.Push(ChessBoardViewModel.Board);
+            gameMoves.Push(ChessBoardViewModel);
         }
 
         public void updateGameState()
@@ -98,7 +99,8 @@ namespace ChessGridMVVM.Models
         public void undoTurn()
         {
             var b = gameMoves.Pop();
-            ChessBoardViewModel.Board = b;
+            ChessBoardViewModel = b;
+            OnPropertyChanged();
         }
 
         public void nextTurn()
@@ -113,6 +115,13 @@ namespace ChessGridMVVM.Models
         {
             Entry e = new Entry();
             e.Show();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
