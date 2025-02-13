@@ -113,6 +113,8 @@ namespace ChessGridMVVM.Models
 
         public void endGame()
         {
+            GameEnd ge = new GameEnd("Checkmate");
+            ge.Show();
             Entry e = new Entry();
             e.Show();
         }

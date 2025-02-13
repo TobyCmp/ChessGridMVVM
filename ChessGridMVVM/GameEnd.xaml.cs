@@ -15,16 +15,15 @@ using System.Windows.Shapes;
 namespace ChessGridMVVM
 {
     /// <summary>
-    /// Interaction logic for Window1.xaml
+    /// Interaction logic for GameEnd.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class GameEnd : Window
     {
-        private string _result;
-
-        public Window1(string result)
+        private string result;
+        public GameEnd(string _result)
         {
             InitializeComponent();
-            _result = result;
+            result = _result;
         }
     }
 }
