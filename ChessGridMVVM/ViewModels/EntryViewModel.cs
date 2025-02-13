@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessGridMVVM
+namespace ChessGridMVVM.ViewModels
 {
     public class EntryViewModel
     {
@@ -25,5 +25,5 @@ namespace ChessGridMVVM
         {
             _databaseHelper.AddPlayer(name, password);
         }
-    } 
+    }
 }
