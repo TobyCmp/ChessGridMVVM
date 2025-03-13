@@ -8,38 +8,48 @@
         Title
         ="Entry" Height="700" Width="500">
     <Grid>
-        <ToggleButton Margin="10,525,362,107" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ToggleButton Margin="10,525,362,107" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked" Grid.RowSpan="2">
             ShowValidMoves
         </ToggleButton>
         <TextBlock
             HorizontalAlignment="Center"
-            FontSize="50" Margin="0,35,0,-35">
+            FontSize="50" Margin="0,35,0,-35" Grid.RowSpan="2">
             Chess
         </TextBlock>
         <TextBlock
             HorizontalAlignment="Center"
-            FontSize="15" Margin="0,98,0,-99">
+            FontSize="15" Margin="0,98,0,-99" Grid.RowSpan="2">
             By Toby Chick
         </TextBlock>
         <Button
-            Click="Game_Click" Margin="154,397,154,220" Content="Load Game"/>
+            Click="Game_Click" Margin="154,397,154,220" Content="Load Game" Grid.RowSpan="2"/>
         <Button
-            Click="Register_Click" Margin="176,279,176,363" Content="Register"/>
+            Click="Register_Click" Margin="176,279,176,363" Content="Register" Grid.RowSpan="2"/>
         <Button
-            Click="Login_Click" Margin="176,330,176,312" Content="Login"/>
+            Click="Login_Click" Margin="176,330,176,312" Content="Login" Grid.RowSpan="2"/>
 
         <TextBox Margin="176,143,176,492"
             TextAlignment="Center"
             Name="Username"
-            FontSize="15" Text="Username"/>
+            FontSize="15" Text="Username" Grid.RowSpan="2"/>
         <TextBox Margin="176,207,176,423"
             TextAlignment="Center"
             Name="Password"
-            FontSize="15" Text="Password"/>
-        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Width="300" Margin="176,492,0,0">
+            FontSize="15" Text="Password" Grid.RowSpan="2"/>
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Width="300" Margin="176,492,0,0" Grid.RowSpan="2">
             <DataGrid x:Name="UserGrid" ItemsSource="{Binding Players}" AutoGenerateColumns="True" Margin="10" Height="150"/>
 
         </StackPanel>
+        <TextBlock Name ="User1" Text="User 1: Guest" Margin="0,0,383,614" Grid.RowSpan="2"></TextBlock>
+        <TextBlock Name ="User2" Text="User 2: Guest" Margin="0,22,383,593" Grid.RowSpan="2"></TextBlock>
+        <ToggleButton>test</ToggleButton>
+        <Button
+            Click="ToggleUser_Click" Content="Toggle User" Grid.RowSpan="2" Width="100" Height="30" Margin="352,138,48,516"/>
+        <TextBlock Name ="ToggleText" Text="Active User: 1" Grid.RowSpan="2" Width="100" Margin="352,98,48,553" />
     </Grid>
 
 </Window>

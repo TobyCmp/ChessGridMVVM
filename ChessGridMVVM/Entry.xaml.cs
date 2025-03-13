@@ -25,6 +25,9 @@ namespace ChessGridMVVM
         private string password = "";
         private bool showValidMoves = false;
         private EntryViewModel viewModel;
+        private bool activeUser1 = true;
+
+
         public Entry()
         {
             InitializeComponent();
@@ -48,6 +51,7 @@ namespace ChessGridMVVM
             if(viewModel.login(username, password))
             {
                 Username.Text = "Logged innn";
+                (activeUser1 ? User1 : User2).Text = "User " + (activeUser1 ? "1" : "2") + ": " + username;
             }
             else
             {
@@ -71,5 +75,10 @@ namespace ChessGridMVVM
             showValidMoves = false;
         }
 
+        private void ToggleUser_Click(object sender, RoutedEventArgs e)
+        {
+            activeUser1 = !activeUser1;
+            ToggleText.Text = "Active User: " + (activeUser1 ? "1" : "2");
+        }
     }
 }
