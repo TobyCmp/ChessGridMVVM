@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.IO;
+using ChessGridMVVM.Models;
 
 namespace ChessGridMVVM
 {
@@ -61,6 +62,30 @@ namespace ChessGridMVVM
                 }
 
             }
+        }
+
+        public bool validPlayer(string _username, string _password)
+        {
+            bool valid = false;
+
+            using (var conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                string selectQuery = "SELECT * FROM Players WHERE Username = '" + _username + "' AND Password = '" + _password + "'";
+                using (var cmd = new SQLiteCommand(selectQuery, conn))
+                {
+                    var dr = cmd.ExecuteReader();
+                    dr.Read();
+                    if (dr.HasRows)
+                    {
+                        return true;
+                    }
+                }
+
+
+            }
+
+            return valid;
         }
     }
 }

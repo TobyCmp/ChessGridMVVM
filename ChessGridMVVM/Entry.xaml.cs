@@ -45,14 +45,21 @@ namespace ChessGridMVVM
         {
             username = Username.Text;
             password = Password.Text;
-            viewModel.addPlayer(username, password);
-
+            if(viewModel.login(username, password))
+            {
+                Username.Text = "Logged innn";
+            }
+            else
+            {
+                Username.Text = "Not logged inn";
+            }
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
             username = Username.Text;
             password = Password.Text;
+            viewModel.addPlayer(username, password);
         }
 
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
