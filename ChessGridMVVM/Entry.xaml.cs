@@ -26,6 +26,7 @@ namespace ChessGridMVVM
         private bool showValidMoves = false;
         private EntryViewModel viewModel;
         private bool activeUser1 = true;
+        private User guest = new User(-1, "Guest");
         private User user1 = null;
         private User user2 = null;
 
@@ -35,6 +36,8 @@ namespace ChessGridMVVM
             InitializeComponent();
             viewModel = new EntryViewModel();
             DataContext = viewModel;
+            user1 = guest;
+            user2 = guest;
             
         }
 

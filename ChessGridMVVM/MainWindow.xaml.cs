@@ -33,7 +33,9 @@ namespace ChessGridMVVM
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            game.undoTurn();
+            //game.undoTurn();
+            game.endGame();
+            Close();
         }
     }
 }

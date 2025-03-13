@@ -13,9 +13,11 @@
             Game End
         </TextBlock>
         <TextBlock
+            Name="resultBox"
             HorizontalAlignment="Center"
             FontSize="20" Margin="0,88,0,-88">
             Result:
         </TextBlock>
+        <Button Margin="287,167,287,182" Click="Button_Click">Return to homepage</Button>
     </Grid>
 </Window>

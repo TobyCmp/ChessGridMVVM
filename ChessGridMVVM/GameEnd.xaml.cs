@@ -19,11 +19,20 @@ namespace ChessGridMVVM
     /// </summary>
     public partial class GameEnd : Window
     {
-        private string result;
-        public GameEnd(string _result)
+        public GameEnd(string result, User winner, User loser)
         {
             InitializeComponent();
-            result = _result;
+            if(result == "s")
+            {
+                resultBox.Text = string.Format("The game between {0} and {1} was a draw.", winner.Name, loser.Name);
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Entry entry = new Entry();
+            entry.Show();
+            Close();
         }
     }
 }

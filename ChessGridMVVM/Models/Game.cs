@@ -118,10 +118,9 @@ namespace ChessGridMVVM.Models
 
         public void endGame()
         {
-            GameEnd ge = new GameEnd("Checkmate");
+            GameEnd ge = new GameEnd("s", _user1, _user2);
             ge.Show();
-            Entry e = new Entry();
-            e.Show();
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
