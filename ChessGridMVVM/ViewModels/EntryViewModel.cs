@@ -26,11 +26,9 @@ namespace ChessGridMVVM.ViewModels
             _databaseHelper.AddPlayer(name, password);
         }
 
-        public bool login(string username, string password)
+        public User login(string username, string password)
         {
-            return _databaseHelper.validPlayer(username, password);
-            
-
+            return _databaseHelper.fetchUser(username, password);
         }
     }
 }

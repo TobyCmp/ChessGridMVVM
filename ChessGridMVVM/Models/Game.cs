@@ -19,6 +19,9 @@ namespace ChessGridMVVM.Models
 
         private Player _currentPlayer;
         private Player _opposingPlayer;
+        private User _user1;
+        private User _user2;
+
 
         private Stack<ChessBoardViewModel> gameMoves;
 
@@ -64,7 +67,7 @@ namespace ChessGridMVVM.Models
         }
 
 
-        public Game(bool showValidMoves)
+        public Game(User user1, User user2, bool showValidMoves)
         {
             ChessBoardViewModel = new ChessBoardViewModel(this, showValidMoves);
             WhitePlayer = new Player("White");
@@ -73,6 +76,8 @@ namespace ChessGridMVVM.Models
             OpposingPlayer = BlackPlayer;
             GameState = "Valid";
             gameMoves = new Stack<ChessBoardViewModel>();
+            _user1 = user1;
+            _user2 = user2;
         }
 
         public void endTurn()

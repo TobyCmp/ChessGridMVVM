@@ -64,10 +64,9 @@ namespace ChessGridMVVM
             }
         }
 
-        public bool validPlayer(string _username, string _password)
+        public User fetchUser(string _username, string _password)
         {
-            bool valid = false;
-
+            User user = null;
             using (var conn = new SQLiteConnection(connectionString))
             {
                 conn.Open();
@@ -78,14 +77,12 @@ namespace ChessGridMVVM
                     dr.Read();
                     if (dr.HasRows)
                     {
-                        return true;
+                        user = new User(dr.GetInt32(0), dr.GetString(1));
                     }
                 }
-
-
             }
 
-            return valid;
+            return user;
         }
     }
 }

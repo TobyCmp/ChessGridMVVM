@@ -12,9 +12,9 @@
             <RowDefinition Height="0*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ToggleButton Margin="10,525,362,107" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked" Grid.RowSpan="2">
+        <Button Margin="10,525,362,107" Click="ToggleButton_Checked" Grid.RowSpan="2">
             ShowValidMoves
-        </ToggleButton>
+        </Button>
         <TextBlock
             HorizontalAlignment="Center"
             FontSize="50" Margin="0,35,0,-35" Grid.RowSpan="2">

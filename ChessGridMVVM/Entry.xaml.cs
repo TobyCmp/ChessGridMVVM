@@ -26,6 +26,8 @@ namespace ChessGridMVVM
         private bool showValidMoves = false;
         private EntryViewModel viewModel;
         private bool activeUser1 = true;
+        private User user1 = null;
+        private User user2 = null;
 
 
         public Entry()
@@ -38,7 +40,7 @@ namespace ChessGridMVVM
 
         private void Game_Click(object sender, EventArgs e)
         {
-            MainWindow m = new MainWindow(showValidMoves);
+            MainWindow m = new MainWindow(user1, user2,showValidMoves);
             m.Show();
             Hide();
             
@@ -48,14 +50,23 @@ namespace ChessGridMVVM
         {
             username = Username.Text;
             password = Password.Text;
-            if(viewModel.login(username, password))
+            var fetchedUser = viewModel.login(username, password);
+            if(fetchedUser != null)
             {
+                if(activeUser1)
+                {
+                    user1 = fetchedUser;
+                }
+                else
+                {
+                    user2 = fetchedUser;
+                }
+                (activeUser1 ? User1 : User2).Text = "User " + (activeUser1 ? "1" : "2") + ": " + username + " (" + fetchedUser.Id + ")";
                 Username.Text = "Logged innn";
-                (activeUser1 ? User1 : User2).Text = "User " + (activeUser1 ? "1" : "2") + ": " + username;
             }
             else
             {
-                Username.Text = "Not logged inn";
+                Username.Text = "Incorrect deets";
             }
         }
 
@@ -68,11 +79,7 @@ namespace ChessGridMVVM
 
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
         {
-            showValidMoves = true;
-        }
-        private void ToggleButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            showValidMoves = false;
+            showValidMoves = !showValidMoves;
         }
 
         private void ToggleUser_Click(object sender, RoutedEventArgs e)
