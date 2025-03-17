@@ -1,0 +1,33 @@
+﻿5,4,White,King
+0,3,Black,King
+0,0,Black,Rook
+0,7,Black,Rook
+7,0,White,Rook
+7,7,White,Rook      
+-
+/*        for (int j = 0; j <= Size; j++)
+        {
+            for (int i = 0; i < Size; i++)
+            {
+                if (j == 1)
+                {
+                    Board[7 - j][i].Piece = new Pawn("White");
+                }
+
+                if (j == 6)
+                {
+                    Board[7 - j][i].Piece = new Pawn("Black");
+                }
+            }
+        }
+        Board[0][0].Piece = new Rook("Black");
+        Board[0][7].Piece = new Rook("Black");
+        Board[7][0].Piece = new Rook("White");
+        Board[7][7].Piece = new Rook("White");
+        Board[7][2].Piece = new Bishop("White");
+        Board[7][3].Piece = new Queen("White");
+        Board[4][5].Piece = new Knight("White");
+        Board[0][4].Piece = new Rook("Black");*/
+0,7,Black,Rook
+7,0,White,Rook
+7,7,White,Rook

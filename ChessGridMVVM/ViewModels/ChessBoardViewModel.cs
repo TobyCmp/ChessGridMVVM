@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System;
 using System.Windows;
 using System.Collections;
+using System.IO;
 
 public class ChessBoardViewModel : INotifyPropertyChanged
 {
@@ -149,36 +150,66 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     private void IntializePieces() //  Places the pieces on the board in their predefined positions
     {
-
-        for (int j = 0; j <= Size; j++)
+        using (StreamReader readtext = new StreamReader("C:\\Users\\K31644\\Source\\Repos\\ChessGridMVV\\ChessGridMVVM\\Starting.txt"))
         {
-            for (int i = 0; i < Size; i++)
+            bool done = false;
+            string readText;
+            string[] tokens;
+            int x;
+            int y;
+            string colour;
+            string piece;
+
+            while (done == false)
             {
-                if (j == 1)
+                readText = readtext.ReadLine();
+                if (readText == "-")
                 {
-                    Board[7 - j][i].Piece = new Pawn("White");
+                    done = true;
+                }
+                else
+                {
+                    tokens = readText.Split(',');
+                    x = Convert.ToInt32(tokens[0]);
+                    y = Convert.ToInt32(tokens[1]);
+                    colour = tokens[2];
+                    piece = tokens[3];
+                    if (piece == "Rook")
+                    {
+                        Board[x][y].Piece = new Rook(colour);
+                    }
+                    if (piece == "Pawn")
+                    {
+                        Board[x][y].Piece = new Pawn(colour);
+                    }
+                    if (piece == "Bishop")
+                    {
+                        Board[x][y].Piece = new Bishop(colour);
+                    }
+                    if (piece == "Knight")
+                    {
+                        Board[x][y].Piece = new Knight(colour);
+                    }
+                    if (piece == "Queen")
+                    {
+                        Board[x][y].Piece = new Queen(colour);
+                    }
+                    if (piece == "King")
+                    {
+                        if(colour == "White")
+                        {
+                            WhiteKing = Board[x][y];
+                        }
+                        else
+                        {
+                            BlackKing = Board[x][y];
+                        }
+                        Board[x][y].Piece = new King(colour);
+                    }
                 }
 
-                if (j == 6)
-                {
-                    Board[7 - j][i].Piece = new Pawn("Black");
-                }
             }
         }
-        Board[0][0].Piece = new Rook("Black");
-        Board[0][7].Piece = new Rook("Black");
-        Board[7][0].Piece = new Rook("White");
-        Board[7][7].Piece = new Rook("White");
-        Board[7][2].Piece = new Bishop("White");
-        Board[7][3].Piece = new Queen("White");
-        Board[5][4].Piece = new King("White");
-        Board[4][5].Piece = new Knight("White");
-        Board[0][3].Piece = new King("Black");
-        Board[0][4].Piece = new Rook("Black");
-
-        WhiteKing = Board[5][4];
-        BlackKing = Board[0][3];
-
     }
 
     // Handles the selection of a square and manages the logic for selecting pieces and moving them.
