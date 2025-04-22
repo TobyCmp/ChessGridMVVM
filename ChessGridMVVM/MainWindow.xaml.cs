@@ -10,14 +10,14 @@ namespace ChessGridMVVM
         private ChessBoardViewModel ViewModel => DataContext as ChessBoardViewModel;
         Game game;
 
-        public MainWindow(User user1, User user2, bool showValidMoves)
+        public MainWindow(User user1, User user2, bool showValidMoves, string filename)
         {
 
             //InitializeComponent();
             //DataContext = new ChessBoardViewModel();
 
             InitializeComponent();
-            game = new Game(user1, user2, showValidMoves); // create an instance of the game
+            game = new Game(user1, user2, showValidMoves, filename); // create an instance of the game
             DataContext = game.ChessBoardViewModel;
         }
 
@@ -29,13 +29,6 @@ namespace ChessGridMVVM
             {
                 ViewModel.SelectSquare(dataContext.Row, dataContext.Column);
             }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //game.undoTurn();
-            game.endGame();
-            Close();
         }
     }
 }

@@ -122,11 +122,11 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
-    public ChessBoardViewModel(Game game, bool showValidMoves)
+    public ChessBoardViewModel(Game game, bool showValidMoves, string filename)
     {
         Game = game; // accepts game instance
         InitializeBoard(); // creates board
-        IntializePieces(); // adds pieces to board
+        IntializePieces(filename); // adds pieces to board
         IsCurrentPlayerChecked = false;
         _showValidMoves = showValidMoves;
     }
@@ -148,9 +148,10 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
-    private void IntializePieces() //  Places the pieces on the board in their predefined positions
+    private void IntializePieces(string filename) //  Places the pieces on the board in their predefined positions
     {
-        using (StreamReader readtext = new StreamReader("C:\\Users\\K31644\\Source\\Repos\\ChessGridMVV\\ChessGridMVVM\\Starting.txt"))
+        string filepath = "C:\\Users\\Toby\\source\\repos\\ChessGridMVVM\\chessmvm\\ChessGridMVVM\\" + filename + ".txt";
+        using (StreamReader readtext = new StreamReader(filepath))
         {
             bool done = false;
             string readText;
@@ -196,7 +197,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                     }
                     if (piece == "King")
                     {
-                        if(colour == "White")
+                        if (colour == "White")
                         {
                             WhiteKing = Board[x][y];
                         }

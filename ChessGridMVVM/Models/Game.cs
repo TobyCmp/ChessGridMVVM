@@ -35,11 +35,11 @@ namespace ChessGridMVVM.Models
                 {
                     if(value == "Checkmate")
                     {
-                        endGame();
+                        endGame("Checkmate");
                     }
                     if(value == "Stalemate")
                     {
-                        endGame();
+                        endGame("Stalemate");
                     }
                 }
                 else
@@ -67,9 +67,9 @@ namespace ChessGridMVVM.Models
         }
 
 
-        public Game(User user1, User user2, bool showValidMoves)
+        public Game(User user1, User user2, bool showValidMoves, string filename)
         {
-            ChessBoardViewModel = new ChessBoardViewModel(this, showValidMoves);
+            ChessBoardViewModel = new ChessBoardViewModel(this, showValidMoves, filename);
             WhitePlayer = new Player("White");
             BlackPlayer = new Player("Black");
             CurrentPlayer = WhitePlayer;
@@ -116,10 +116,20 @@ namespace ChessGridMVVM.Models
             addSnapshot();
         }
 
-        public void endGame()
+        public void endGame(string outcome)
         {
-            GameEnd ge = new GameEnd("s", _user1, _user2);
-            ge.Show();
+            if(_currentPlayer == WhitePlayer)
+            {
+                GameEnd ge = new GameEnd(outcome, _user1, _user2);
+                ge.Show();
+
+            }
+            else
+            {
+                GameEnd ge = new GameEnd(outcome, _user2, _user1);
+                ge.Show();
+
+            }
             
         }
 

@@ -22,7 +22,11 @@ namespace ChessGridMVVM
         public GameEnd(string result, User winner, User loser)
         {
             InitializeComponent();
-            if(result == "s")
+            if(result == "Checkmate")
+            {
+                resultBox.Text = string.Format("{0} won the game by checkmate against {1}", winner.Name, loser.Name);
+            }
+            if (result == "Stalemate")
             {
                 resultBox.Text = string.Format("The game between {0} and {1} was a draw.", winner.Name, loser.Name);
             }

@@ -1,0 +1,13 @@
+﻿0,0,Black,Rook
+0,1,Black,Knight
+0,2,Black,Bishop
+0,3,Black,Queen
+0,4,Black,King
+0,5,Black,Pawn
+7,0,White,Rook
+7,1,White,Knight
+7,2,White,Bishop
+7,3,White,Queen
+7,4,White,King
+7,5,White,Pawn
+-

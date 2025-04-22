@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ChessGridMVVM"
         mc:Ignorable="d"
         Title
-        ="Entry" Height="700" Width="500">
+        ="Entry" Height="705" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0*"/>
@@ -20,19 +20,24 @@
             FontSize="50" Margin="0,35,0,-35" Grid.RowSpan="2">
             Chess
         </TextBlock>
+        
         <TextBlock
             HorizontalAlignment="Center"
             FontSize="15" Margin="0,98,0,-99" Grid.RowSpan="2">
             By Toby Chick
         </TextBlock>
+        <TextBox Margin="252,416,151,234"
+            TextAlignment="Center"
+            Name="filename"
+            FontSize="15" Text="Starting" Grid.RowSpan="2"/>
         <Button
-            Click="Game_Click" Margin="154,397,154,220" Content="Load Game" Grid.RowSpan="2"/>
+            Click="Game_Click" Margin="154,397,257,215" Content="Load Game" Grid.RowSpan="2"/>
         <Button
             Click="Register_Click" Margin="176,279,176,363" Content="Register" Grid.RowSpan="2"/>
         <Button
             Click="Login_Click" Margin="176,330,176,312" Content="Login" Grid.RowSpan="2"/>
 
-        <TextBox Margin="176,143,176,492"
+        <TextBox Margin="178,146,174,489"
             TextAlignment="Center"
             Name="Username"
             FontSize="15" Text="Username" Grid.RowSpan="2"/>

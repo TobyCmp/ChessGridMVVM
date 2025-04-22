@@ -43,7 +43,7 @@ namespace ChessGridMVVM
 
         private void Game_Click(object sender, EventArgs e)
         {
-            MainWindow m = new MainWindow(user1, user2,showValidMoves);
+            MainWindow m = new MainWindow(user1, user2,showValidMoves, filename.Text);
             m.Show();
             Hide();
             
@@ -78,6 +78,8 @@ namespace ChessGridMVVM
             username = Username.Text;
             password = Password.Text;
             viewModel.addPlayer(username, password);
+
+
         }
 
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
@@ -89,6 +91,7 @@ namespace ChessGridMVVM
         {
             activeUser1 = !activeUser1;
             ToggleText.Text = "Active User: " + (activeUser1 ? "1" : "2");
+
         }
     }
 }
