@@ -22,6 +22,7 @@ namespace ChessGridMVVM.Models
         private User _user1;
         private User _user2;
 
+        public string moves; 
 
         private Stack<ChessBoardViewModel> gameMoves;
 
@@ -118,15 +119,21 @@ namespace ChessGridMVVM.Models
 
         public void endGame(string outcome)
         {
-            if(_currentPlayer == WhitePlayer)
+            if(outcome == "Stalemate")
             {
-                GameEnd ge = new GameEnd(outcome, _user1, _user2);
+                GameEnd ge = new GameEnd(_user1, _user2, "1-1", moves);
+                ge.Show();
+            }
+            else if(_currentPlayer == WhitePlayer)
+            {
+
+                GameEnd ge = new GameEnd(_user1, _user2, "1-0", moves);
                 ge.Show();
 
             }
             else
             {
-                GameEnd ge = new GameEnd(outcome, _user2, _user1);
+                GameEnd ge = new GameEnd(_user1, _user2, "0-1", moves);
                 ge.Show();
 
             }

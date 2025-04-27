@@ -66,6 +66,12 @@ namespace ChessGridMVVM
                 }
                 (activeUser1 ? User1 : User2).Text = "User " + (activeUser1 ? "1" : "2") + ": " + username + " (" + fetchedUser.Id + ")";
                 Username.Text = "Logged innn";
+                if(user1.Id != 1 && user2.Id != -1)
+                {
+                    string headtohead = "";
+                    headtohead = viewModel.headToHead(user1.Id, user2.Id);
+                    User2.Text = User2.Text + "\nHeadToHead: " + headtohead;
+                }
             }
             else
             {

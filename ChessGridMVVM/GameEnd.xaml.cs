@@ -19,19 +19,33 @@ namespace ChessGridMVVM
     /// </summary>
     public partial class GameEnd : Window
     {
-        public GameEnd(string result, User winner, User loser)
+        private DatabaseHelper _databaseHelper;
+
+
+        public GameEnd(User white, User black, string result, string moves)
         {
             InitializeComponent();
-            if(result == "Checkmate")
+            _databaseHelper = new DatabaseHelper();
+            if(result == "1-1")
             {
-                resultBox.Text = string.Format("{0} won the game by checkmate against {1}", winner.Name, loser.Name);
+                resultBox.Text = string.Format("Stalemate! - Game ends in a draw.");
             }
-            if (result == "Stalemate")
+            if (result == "0-1")
             {
-                resultBox.Text = string.Format("The game between {0} and {1} was a draw.", winner.Name, loser.Name);
+                resultBox.Text = string.Format("Checkmate! - Black wins");
             }
+            if (result == "1-0")
+            {
+                resultBox.Text = string.Format("Checkmate! - White wins");
+            }
+     
+            SaveGame(white.Id, black.Id, result);
         }
 
+        private void SaveGame(int whiteID, int blackID, string result)
+        {
+            _databaseHelper.AddGame(whiteID, blackID, result);
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Entry entry = new Entry();

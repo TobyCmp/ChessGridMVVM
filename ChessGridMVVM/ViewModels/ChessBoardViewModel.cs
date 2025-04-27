@@ -7,6 +7,7 @@ using System;
 using System.Windows;
 using System.Collections;
 using System.IO;
+using System.Media;
 
 public class ChessBoardViewModel : INotifyPropertyChanged
 {
@@ -383,15 +384,23 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
+    SoundPlayer move_sound = new SoundPlayer(@"C:\Users\Toby\source\repos\ChessGridMVVM\chessmvm\ChessGridMVVM\move-self.wav");
+    SoundPlayer capture_sound = new SoundPlayer(@"C:\Users\Toby\source\repos\ChessGridMVVM\chessmvm\ChessGridMVVM\capture.wav");
+
+
+
     // Executes the movement of a piece on the board and handles capturing pieces and promotions.
     private void Move(int startRow, int startCol, int endRow, int endCol)
     {
+        move_sound.Play();
+        Game.moves = Game.moves + ConvertToNotation(startRow, startCol, endRow, endCol) + ",";
         var startSquare = Board[7- startRow][startCol];
         var endSquare = Board[7- endRow][endCol];
-        
+       
         if(endSquare.Piece != null)
         {
             Capture(endSquare.Piece);
+            capture_sound.Play();
         }
 
         if (startSquare.Piece is King) // update king pos if its a king
@@ -536,6 +545,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         return null;
     }
 
+    SoundPlayer notify_sound = new SoundPlayer(@"C:\Users\Toby\source\repos\ChessGridMVVM\chessmvm\ChessGridMVVM\notify.wav");
     // Check if king is in check
     private bool kinginCheck(string color)
     {
@@ -544,6 +554,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             if (isThreatened(WhiteKing, WhiteKing.Piece.PieceColor) == true) // king is in check
             {
                 threat = findThreatPiece(WhiteKing, WhiteKing.Piece.PieceColor);
+                notify_sound.Play();
                 return true;
             }
         }
@@ -553,11 +564,13 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             if (isThreatened(BlackKing, BlackKing.Piece.PieceColor) == true) // king is in check
             {
                 threat = findThreatPiece(BlackKing, BlackKing.Piece.PieceColor);
+                notify_sound.Play();
                 return true;
             }
 
         }
 
+        
         threat = null;
         return false;
     }
@@ -644,7 +657,15 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         
     }
 
-
+    private string ConvertToNotation(int startrow, int startcol, int endrow, int endcol)
+    {
+        string start;
+        string end;
+        string[] columns = { "a", "b", "c", "d", "e", "f", "g", "h" };
+        start = columns[startcol] + Convert.ToString(startrow+1);
+        end = columns[endcol] + Convert.ToString(endrow+1);
+        return start + end;
+    }
     // Stores captured piece in captured list
     private void Capture(Piece p)
     {

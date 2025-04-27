@@ -10,9 +10,10 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="700" />
+            <RowDefinition Height="100" />
         </Grid.RowDefinitions>
-
+        
         <!-- ItemsControl for the 8x8 grid -->
         <ItemsControl ItemsSource="{Binding Board}">
             <ItemsControl.ItemsPanel>
