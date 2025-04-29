@@ -53,10 +53,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
-        <Button RenderTransformOrigin="50,50" Margin="10,5,448,25" Grid.Row="1" Click="Button_Click">
-            Undo
-        </Button>
     </Grid>
 
 </Window>

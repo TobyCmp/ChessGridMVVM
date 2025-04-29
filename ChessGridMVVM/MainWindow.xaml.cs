@@ -40,10 +40,6 @@ namespace ChessGridMVVM
                 game.undoTurn(); // Call your existing undo method
             }
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            game.undoTurn();
-        }
 
     }
 }

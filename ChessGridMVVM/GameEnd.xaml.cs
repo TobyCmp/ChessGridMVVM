@@ -20,7 +20,7 @@ namespace ChessGridMVVM
     public partial class GameEnd : Window
     {
         private DatabaseHelper _databaseHelper;
-
+        string _moves;
 
         public GameEnd(User white, User black, string result, string moves)
         {
@@ -38,7 +38,7 @@ namespace ChessGridMVVM
             {
                 resultBox.Text = string.Format("Checkmate! - White wins");
             }
-     
+            _moves = moves;
             SaveGame(white.Id, black.Id, result);
         }
 
@@ -51,6 +51,11 @@ namespace ChessGridMVVM
             Entry entry = new Entry();
             entry.Show();
             Close();
+        }
+
+        private void Button2_Click(object sender, RoutedEventArgs e)
+        {
+            Moves.Text = _moves;
         }
     }
 }

@@ -1,0 +1,2 @@
+﻿4,4,White,Pawn
+3,3,Black,Pawn

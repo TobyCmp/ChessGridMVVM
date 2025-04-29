@@ -19,5 +19,7 @@
             Result:
         </TextBlock>
         <Button Margin="287,167,287,182" Click="Button_Click">Return to homepage</Button>
+        <Button Margin="318,283,318,107" Click="Button2_Click" Content="Show Move Log"/>
+        <TextBlock Name="Moves" Margin="0,332,10,46"></TextBlock>
     </Grid>
 </Window>

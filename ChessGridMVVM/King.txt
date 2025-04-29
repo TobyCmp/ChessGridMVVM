@@ -1,0 +1,2 @@
+﻿4,4,White,King
+4,5,Black,Pawn
