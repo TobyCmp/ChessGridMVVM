@@ -22,9 +22,9 @@ namespace ChessGridMVVM.Models
         private User _user1;
         private User _user2;
 
-        public string moves; 
+        public string moves;
 
-        private Stack<ChessBoardViewModel> gameMoves;
+        private Stack<ObservableCollection<ObservableCollection<Square>>> gameMoves;
 
         private string _gameState;
         public string GameState
@@ -76,7 +76,8 @@ namespace ChessGridMVVM.Models
             CurrentPlayer = WhitePlayer;
             OpposingPlayer = BlackPlayer;
             GameState = "Valid";
-            gameMoves = new Stack<ChessBoardViewModel>();
+            gameMoves = new Stack<ObservableCollection<ObservableCollection<Square>>>();
+            addSnapshot();
             _user1 = user1;
             _user2 = user2;
         }
@@ -93,7 +94,7 @@ namespace ChessGridMVVM.Models
         // Stores current board file in a stack. Used for undo-move.
         private void addSnapshot()
         {
-            gameMoves.Push(ChessBoardViewModel);
+            gameMoves.Push(CloneBoard(ChessBoardViewModel.Board));
         }
 
         public void updateGameState()
@@ -104,9 +105,17 @@ namespace ChessGridMVVM.Models
 
         public void undoTurn()
         {
-            var b = gameMoves.Pop();
-            ChessBoardViewModel = b;
-            OnPropertyChanged();
+            if (gameMoves.Count > 1)
+            {
+                gameMoves.Pop(); // Remove current state
+                ChessBoardViewModel.Board = CloneBoard(gameMoves.Peek()); // Restore previous state
+
+                // Swap players back
+                CurrentPlayer = CurrentPlayer == WhitePlayer ? BlackPlayer : WhitePlayer;
+                OpposingPlayer = CurrentPlayer == WhitePlayer ? BlackPlayer : WhitePlayer;
+
+                ChessBoardViewModel.updateKingVariable(CurrentPlayer.Color);
+            }
         }
 
         public void nextTurn()
@@ -115,6 +124,27 @@ namespace ChessGridMVVM.Models
             CurrentPlayer = CurrentPlayer == WhitePlayer ? BlackPlayer : WhitePlayer;
             ChessBoardViewModel.updateKingVariable(CurrentPlayer.Color);
             addSnapshot();
+        }
+
+        private ObservableCollection<ObservableCollection<Square>> CloneBoard(ObservableCollection<ObservableCollection<Square>> board)
+        {
+            var newBoard = new ObservableCollection<ObservableCollection<Square>>();
+            foreach (var row in board)
+            {
+                var newRow = new ObservableCollection<Square>();
+                foreach (var square in row)
+                {
+                    // Create a new Square with the same color, row, and column
+                    var newSquare = new Square(square.Color, square.Row, square.Column);
+
+                    // Copy the piece reference if needed
+                    newSquare.Piece = square.Piece; // Assuming Piece is a reference or needs copying separately
+
+                    newRow.Add(newSquare);
+                }
+                newBoard.Add(newRow);
+            }
+            return newBoard;
         }
 
         public void endGame(string outcome)

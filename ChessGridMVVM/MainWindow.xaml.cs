@@ -19,6 +19,8 @@ namespace ChessGridMVVM
             InitializeComponent();
             game = new Game(user1, user2, showValidMoves, filename); // create an instance of the game
             DataContext = game.ChessBoardViewModel;
+            this.Focusable = true;
+            this.Focus();
         }
 
         private void Square_Click(object sender, MouseButtonEventArgs e)
@@ -30,5 +32,18 @@ namespace ChessGridMVVM
                 ViewModel.SelectSquare(dataContext.Row, dataContext.Column);
             }
         }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.U)
+            {
+                game.undoTurn(); // Call your existing undo method
+            }
+        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            game.undoTurn();
+        }
+
     }
 }

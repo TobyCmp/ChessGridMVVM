@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:ChessGridMVVM"
         xmlns:converters="clr-namespace:ChessGridMVVM.Converters"
-        Title="Chess Grid" Height="800" Width="800">
+        Title="Chess Grid" Height="800" Width="800"
+        KeyDown="Window_KeyDown" Focusable="True">
+
     <Window.Resources>
         <converters:InverseColorConverter x:Key="InverseColorConverter"/>
     </Window.Resources>
@@ -13,7 +15,7 @@
             <RowDefinition Height="700" />
             <RowDefinition Height="100" />
         </Grid.RowDefinitions>
-        
+
         <!-- ItemsControl for the 8x8 grid -->
         <ItemsControl ItemsSource="{Binding Board}">
             <ItemsControl.ItemsPanel>
@@ -51,6 +53,10 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+
+        <Button RenderTransformOrigin="50,50" Margin="10,5,448,25" Grid.Row="1" Click="Button_Click">
+            Undo
+        </Button>
     </Grid>
 
 </Window>
