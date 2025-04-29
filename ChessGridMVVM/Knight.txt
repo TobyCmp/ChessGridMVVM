@@ -1,2 +1,5 @@
-﻿4,4,White,Knight
-6,5,Black,Pawn
+﻿0,0,Black,King
+7,7,White,King
+4,5,White,Knight
+2,3,Black,Queen
+-

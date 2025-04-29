@@ -6,22 +6,22 @@
         xmlns:local="clr-namespace:ChessGridMVVM"
         mc:Ignorable="d"
         Title
-        ="Entry" Height="705" Width="500">
+        ="Entry" Height="720" Width="535">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ToggleButton Margin="10,525,362,107" Click="ToggleButton_Checked" Grid.RowSpan="2">
             ShowValidMoves
         </ToggleButton>
-        <ToggleButton Margin="10,605,362,27" Click="ToggleScheme_Checked" Grid.RowSpan="2" Content="White/Black Squares"/>
+        <ToggleButton Margin="10,605,362,27" Click="ToggleScheme_Checked" Grid.RowSpan="2" Content="Pink/Beige Squares"/>
         <TextBlock
             HorizontalAlignment="Center"
             FontSize="50" Margin="0,35,0,-35" Grid.RowSpan="2">
             Chess
         </TextBlock>
-        
+
         <TextBlock
             HorizontalAlignment="Center"
             FontSize="15" Margin="0,98,0,-99" Grid.RowSpan="2">
@@ -52,9 +52,8 @@
         </StackPanel>
         <TextBlock Name ="User1" Text="User 1: Guest" Margin="0,0,383,614" Grid.RowSpan="2"></TextBlock>
         <TextBlock Name ="User2" Text="User 2: Guest" Margin="0,22,383,593" Grid.RowSpan="2"></TextBlock>
-        <ToggleButton>test</ToggleButton>
         <Button
-            Click="ToggleUser_Click" Content="Toggle User" Grid.RowSpan="2" Width="100" Height="30" Margin="352,138,48,516"/>
+            Click="ToggleUser_Click" Content="Toggle User" Width="100" Height="30" Margin="352,130,48,185"/>
         <TextBlock Name ="ToggleText" Text="Active User: 1" Grid.RowSpan="2" Width="100" Margin="352,98,48,553" />
 
     </Grid>

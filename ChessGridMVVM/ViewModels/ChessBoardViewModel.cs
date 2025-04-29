@@ -46,8 +46,12 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             }
             else
             {
-                WhiteKing.RevertColor();
-                BlackKing.RevertColor();
+                if(WhiteKing != null && BlackKing != null)
+                {
+                    WhiteKing.RevertColor();
+                    BlackKing.RevertColor();
+                }
+
             }
         }
     }
@@ -156,7 +160,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     private void IntializePieces(string filename) //  Places the pieces on the board in their predefined positions
     {
-        string filepath = "C:\\Users\\Toby\\Source\\Repos\\ChessGrid\\ChessGridMVVM\\" + filename + ".txt";
+        string filepath = "C:\\Users\\Toby\\Source\\Repos\\ChessGridMVV\\ChessGridMVVM\\" + filename + ".txt";
         using (StreamReader readtext = new StreamReader(filepath))
         {
             bool done = false;
@@ -655,7 +659,22 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 }
 
             }
-            return "Stalemate";
+            bool valid = false;
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if(Board[7 - j][i].Piece != null && Board[7 - j][i].Piece.PieceColor == color && getValidMoves(Board[7 - j][i]).Count > 0)
+                    {
+                        valid = true;
+                    }
+                }
+            }
+            if (!valid)
+            {
+                return "Stalemate";
+
+            }
         }
 
         return "Valid";
