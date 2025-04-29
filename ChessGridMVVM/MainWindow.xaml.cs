@@ -10,14 +10,14 @@ namespace ChessGridMVVM
         private ChessBoardViewModel ViewModel => DataContext as ChessBoardViewModel;
         Game game;
 
-        public MainWindow(User user1, User user2, bool showValidMoves, string filename)
+        public MainWindow(User user1, User user2, bool showValidMoves, string filename, bool altColour)
         {
 
             //InitializeComponent();
             //DataContext = new ChessBoardViewModel();
 
             InitializeComponent();
-            game = new Game(user1, user2, showValidMoves, filename); // create an instance of the game
+            game = new Game(user1, user2, showValidMoves, filename, altColour); // create an instance of the game
             DataContext = game.ChessBoardViewModel;
             this.Focusable = true;
             this.Focus();

@@ -29,7 +29,7 @@ namespace ChessGridMVVM
         private User guest = new User(-1, "Guest");
         private User user1 = null;
         private User user2 = null;
-
+        private bool altColour = false;
 
         public Entry()
         {
@@ -43,7 +43,7 @@ namespace ChessGridMVVM
 
         private void Game_Click(object sender, EventArgs e)
         {
-            MainWindow m = new MainWindow(user1, user2,showValidMoves, filename.Text);
+            MainWindow m = new MainWindow(user1, user2,showValidMoves, filename.Text, altColour);
             m.Show();
             Hide();
             
@@ -98,6 +98,12 @@ namespace ChessGridMVVM
             activeUser1 = !activeUser1;
             ToggleText.Text = "Active User: " + (activeUser1 ? "1" : "2");
 
+        }
+
+
+        private void ToggleScheme_Checked(object sender, RoutedEventArgs e)
+        {
+            altColour = !altColour;
         }
     }
 }

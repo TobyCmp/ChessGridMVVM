@@ -123,9 +123,14 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
-    public ChessBoardViewModel(Game game, bool showValidMoves, string filename)
+    public ChessBoardViewModel(Game game, bool showValidMoves, string filename, bool altColour)
     {
         Game = game; // accepts game instance
+        if (altColour)
+        {
+                _primaryColor = "#E3BEA5";
+                _secondaryColor = "#F5F5DC";
+        }
         InitializeBoard(); // creates board
         IntializePieces(filename); // adds pieces to board
         IsCurrentPlayerChecked = false;
@@ -151,7 +156,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     private void IntializePieces(string filename) //  Places the pieces on the board in their predefined positions
     {
-        string filepath = "C:\\Users\\Toby\\source\\repos\\ChessGridMVVM\\chessmvm\\ChessGridMVVM\\" + filename + ".txt";
+        string filepath = "C:\\Users\\Toby\\Source\\Repos\\ChessGrid\\ChessGridMVVM\\" + filename + ".txt";
         using (StreamReader readtext = new StreamReader(filepath))
         {
             bool done = false;

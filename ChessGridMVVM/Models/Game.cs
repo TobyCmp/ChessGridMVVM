@@ -68,9 +68,9 @@ namespace ChessGridMVVM.Models
         }
 
 
-        public Game(User user1, User user2, bool showValidMoves, string filename)
+        public Game(User user1, User user2, bool showValidMoves, string filename, bool altColour)
         {
-            ChessBoardViewModel = new ChessBoardViewModel(this, showValidMoves, filename);
+            ChessBoardViewModel = new ChessBoardViewModel(this, showValidMoves, filename, altColour);
             WhitePlayer = new Player("White");
             BlackPlayer = new Player("Black");
             CurrentPlayer = WhitePlayer;
