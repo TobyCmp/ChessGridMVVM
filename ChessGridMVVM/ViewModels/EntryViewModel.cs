@@ -30,6 +30,7 @@ namespace ChessGridMVVM.ViewModels
         {
             return _databaseHelper.fetchUser(username, password);
         }
+
         public int getWins(int playerID)
         {
             return _databaseHelper.fetchPlayerWins(playerID);

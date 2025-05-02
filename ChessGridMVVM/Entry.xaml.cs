@@ -65,7 +65,8 @@ namespace ChessGridMVVM
                     user2 = fetchedUser;
                 }
                 (activeUser1 ? User1 : User2).Text = "User " + (activeUser1 ? "1" : "2") + ": " + username + " (" + fetchedUser.Id + ")";
-                Username.Text = "Logged innn";
+                Username.Text = "";
+                Password.Text = "";
                 if(user1.Id != 1 && user2.Id != -1)
                 {
                     string headtohead = "";
@@ -75,7 +76,7 @@ namespace ChessGridMVVM
             }
             else
             {
-                Username.Text = "Incorrect deets";
+                ErrorMessage("Login Error - Incorrect details");
             }
         }
 
@@ -83,7 +84,26 @@ namespace ChessGridMVVM
         {
             username = Username.Text;
             password = Password.Text;
-            viewModel.addPlayer(username, password);
+            if(username == "")
+            {
+                ErrorMessage("INVALID USERNAME - Username is empty.");
+            }
+            else if(password == "")
+            {
+                ErrorMessage("INVALID PASSWORD - Password is empty.");
+            }
+            else
+            {
+                if(viewModel.login(username,password) == null)
+                {
+                    viewModel.addPlayer(username, password);
+
+                }
+                else
+                {
+                    ErrorMessage("User Exists Already!");
+                }
+            }
 
 
         }
@@ -104,6 +124,11 @@ namespace ChessGridMVVM
         private void ToggleScheme_Checked(object sender, RoutedEventArgs e)
         {
             altColour = !altColour;
+        }
+
+        private void ErrorMessage(string message)
+        {
+            MessageBox.Show(message);
         }
     }
 }
