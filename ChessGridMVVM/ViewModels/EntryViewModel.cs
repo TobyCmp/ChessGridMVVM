@@ -35,6 +35,12 @@ namespace ChessGridMVVM.ViewModels
         {
             return _databaseHelper.fetchPlayerWins(playerID);
         }
+
+        public List<String> getMoves(int gameId)
+        {
+            return _databaseHelper.GetSortedMoves(gameId);
+        }
+        
         
         public string headToHead(int player1_id, int player2_id)
         {
