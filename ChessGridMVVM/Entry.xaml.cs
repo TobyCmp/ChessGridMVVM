@@ -97,6 +97,8 @@ namespace ChessGridMVVM
                 if(viewModel.login(username,password) == null)
                 {
                     viewModel.addPlayer(username, password);
+                    ErrorMessage("Registered");
+
 
                 }
                 else
