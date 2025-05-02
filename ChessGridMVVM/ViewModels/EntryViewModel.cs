@@ -18,12 +18,12 @@ namespace ChessGridMVVM.ViewModels
         public EntryViewModel()
         {
             _databaseHelper = new DatabaseHelper();
-            Players = new ObservableCollection<User>(_databaseHelper.GetPlayers());
+            Players = new ObservableCollection<User>(_databaseHelper.getPlayers());
         }
 
         public void addPlayer(string name, string password)
         {
-            _databaseHelper.AddPlayer(name, password);
+            _databaseHelper.addPlayer(name, password);
         }
 
         public User login(string username, string password)

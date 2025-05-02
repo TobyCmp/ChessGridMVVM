@@ -44,7 +44,7 @@ namespace ChessGridMVVM
 
         private void SaveGame(int whiteID, int blackID, string result)
         {
-            _databaseHelper.AddGame(whiteID, blackID, result);
+            _databaseHelper.addGame(whiteID, blackID, result);
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
